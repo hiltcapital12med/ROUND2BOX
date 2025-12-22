@@ -1,0 +1,145 @@
+// QUICK START: Notificaciones Push en ROUND2BOX
+
+## 🚀 INICIO RÁPIDO (5 minutos)
+
+### Paso 1: Las notificaciones ya están activas
+✅ El sistema se inicializa automáticamente cuando la app carga
+
+### Paso 2: Busca el botón flotante
+📍 Esquina inferior derecha de la pantalla
+- Un 🔔 dorado = Notificaciones activas
+- Un 🔔 gris = Notificaciones inactivas
+
+### Paso 3: Haz clic para ver el panel
+Un panel aparecerá con opciones para:
+- Ver estado de notificaciones
+- Activar/desactivar
+- Información
+
+### Paso 4: Permite los permisos del navegador
+- El navegador pedirá permiso
+- Dale a "Permitir" para recibir notificaciones
+
+### Paso 5: ¡Listo! Recibirás automáticamente:
+- 🔥 Motivación cada mañana a las 8:00
+- ⏰ Recordatorios antes de tus clases
+- 📊 Resumen semanal (domingos 19:00)
+- 🏅 Resumen mensual (día 1, 09:00)
+- 😴 Alerta si no entrenas 7+ días
+
+---
+
+## 🧪 PROBAR EN DESARROLLO
+
+En modo desarrollo, aparece un botón "📢 Demo" para:
+1. Haz clic en el botón Demo (esquina inferior derecha)
+2. Elige qué notificación enviar
+3. ¡Mira cómo aparece!
+
+Esto es útil para verificar que todo funciona antes de ir a producción.
+
+---
+
+## 🔧 PERSONALIZAR HORARIOS
+
+Archivo: `src/utils/notificationsConfig.js`
+
+Cambiar hora de motivación:
+```javascript
+export const NOTIFICATION_SCHEDULES = {
+  motivational: {
+    time: '09:00'  // Cambiar de 08:00 a 09:00
+  }
+};
+```
+
+Cambiar día de progreso semanal:
+```javascript
+weeklyProgress: {
+  day: 1,  // Cambiar de domingo (0) a lunes (1)
+  time: '18:00'
+}
+```
+
+---
+
+## 🛑 TROUBLESHOOTING
+
+### Las notificaciones no aparecen
+1. Verifica que el navegador tenga permisos habilitados
+2. Abre Developer Tools (F12) → Consola
+3. Ejecuta: `console.log(Notification.permission)`
+4. Debe mostrar "granted"
+
+### Permiso bloqueado
+1. Haz clic en el ícono de bloqueo en la barra de URL
+2. Cambia Notificaciones a "Permitir"
+3. Recarga la página
+
+### Quiero desactivarlas temporalmente
+1. Haz clic en el botón 🔔
+2. Desactiva las opciones en el panel
+3. O usa el toggle general
+
+---
+
+## 📨 MENSAJES DISPONIBLES
+
+**Motivación** (6 variantes aleatorias)
+- "🔥 ¡Vamos campeón!"
+- "💪 ¡Otro día, otra victoria!"
+- "⚡ Mentalidad de ganador"
+- Y 3 más...
+
+**Recordatorios de Clase**
+- 60 minutos antes: "Clase en 1 hora"
+- 30 minutos antes: "¡Ya casi!"
+- 5 minutos antes: "¡Última llamada!"
+
+**Progreso**
+- Semanal: "%Asistencia semanal"
+- Mensual: "X clases, Y PRs"
+
+**Inactividad**
+- "No has entrenado en X días"
+
+---
+
+## 🎯 CASOS DE USO
+
+### 👤 Para Atletas
+- Recibir motivación cada mañana
+- No olvidar las clases reservadas
+- Ver su progreso
+
+### 👨‍🏫 Para Entrenadores
+- Ver asistencia del equipo
+- Recordar revisar las reservas
+
+### 📱 Para Dueño del Negocio
+- Mantener atletas activos
+- Reducir inactividad
+- Aumentar retención
+
+---
+
+## 🔐 PRIVACIDAD Y DATOS
+
+- ✅ Las notificaciones se guardan localmente
+- ✅ No se envían datos sensibles
+- ✅ Respeta los permisos del navegador
+- ✅ Se puede desactivar en cualquier momento
+
+---
+
+## 📞 SOPORTE
+
+Si algo no funciona:
+1. Abre la consola (F12)
+2. Busca mensajes de error
+3. Copia el error exacto
+4. Verifica los logs en `src/services/notificationsService.js`
+
+---
+
+¡Que disfrutes del sistema de notificaciones! 🚀

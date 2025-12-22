@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Round2 PWA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#E61C2C', // Rojo Round2
+                            dark: '#B9121F',
+                            light: '#FF4D5A'
+                        },
+                        ui: {
+                            bg: '#FFFFFF',
+                            text: '#111827',
+                            muted: '#6B7280',
+                            card: '#F3F4F6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .hidden-section { display: none; }
+        /* Animaciones suaves */
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Estilos de PWA */
+        .bottom-nav-item.active { color: #E61C2C; font-weight: 600; }
+        .bottom-nav-item.active i { font-weight: fill; }
+    </style>
+</head>
+<body class="bg-white text-ui-text pb-20">
+
+    <header class="fixed top-0 w-full bg-white z-50 border-b border-gray-100 px-4 py-3 flex justify-between items-center shadow-sm h-16">
+        <div class="flex items-center gap-2">
+            <img src="https://i.imgur.com/your_uploaded_image_proxy" alt="Round2 Logo" class="h-8 object-contain hidden" id="realLogo"> 
+            <div class="flex items-center gap-1 font-black italic tracking-tighter text-2xl">
+                <span class="text-brand">ROUND2</span>
+                <i class="ph ph-corners-out text-brand text-xl"></i>
+            </div>
+        </div>
+        
+        <select id="roleSwitcher" onchange="switchRole()" class="text-xs border border-gray-300 rounded px-2 py-1 bg-gray-50 text-gray-600">
+            <option value="user">Vista: Alumno</option>
+            <option value="trainer">Vista: Entrenador</option>
+        </select>
+        
+        <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden border border-gray-300">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="w-full h-full object-cover">
+        </div>
+    </header>
+
+    <main class="pt-20 px-4 max-w-md mx-auto fade-in" id="appContent">
+        
+        <section id="view-home" class="section-view">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold leading-tight">Hola, <span class="text-brand">Campeón</span></h1>
+                <p class="text-ui-muted text-sm" id="welcomeMsg">Tu constancia define tu éxito.</p>
+            </div>
+
+            <div class="bg-black text-white rounded-2xl p-5 mb-6 shadow-lg relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-24 h-24 bg-brand opacity-20 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="bg-brand text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">Hoy</span>
+                        <i class="ph ph-barbell text-2xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">Funcional Box</h3>
+                    <p class="text-gray-400 text-sm mb-4">18:00 hrs • Coach Mike</p>
+                    <button class="w-full bg-white text-black font-bold py-2 rounded-lg text-sm hover:bg-gray-100 transition">Confirmar Asistencia</button>
+                </div>
+            </div>
+
+            <div class="mb-6" id="userProgressSection">
+                <h2 class="text-lg font-bold mb-3">Tu Constancia</h2>
+                <div class="flex justify-between items-center bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <div class="text-center">
+                        <span class="block text-2xl font-black text-brand">3</span>
+                        <span class="text-xs text-gray-500 font-medium">Racha (días)</span>
+                    </div>
+                    <div class="h-8 w-px bg-gray-200"></div>
+                    <div class="text-center">
+                        <span class="block text-2xl font-black text-black">85%</span>
+                        <span class="text-xs text-gray-500 font-medium">Obj. Semanal</span>
+                    </div>
+                    <div class="h-8 w-px bg-gray-200"></div>
+                    <div class="text-center">
+                        <i class="ph ph-trend-up text-2xl text-green-500"></i>
+                        <span class="text-xs text-gray-500 font-medium block">En camino</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="trainerDashboard" class="hidden mb-6">
+                <h2 class="text-lg font-bold mb-3 text-brand">Panel de Entrenador</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                        <i class="ph ph-warning-circle text-brand text-2xl mb-2"></i>
+                        <span class="block font-bold text-gray-800">3 Inactivos</span>
+                        <span class="text-xs text-gray-500">Enviar alerta</span>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <i class="ph ph-users-three text-gray-800 text-2xl mb-2"></i>
+                        <span class="block font-bold text-gray-800">12 Asistencias</span>
+                        <span class="text-xs text-gray-500">Clase 18:00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-agenda" class="section-view hidden-section">
+            <h2 class="text-2xl font-bold mb-4">Agenda Semanal</h2>
+            <div class="flex justify-between mb-6 pb-2 border-b border-gray-100">
+                <div class="text-center p-2 rounded-lg bg-brand text-white shadow-md">
+                    <span class="block text-xs opacity-80">LUN</span>
+                    <span class="block font-bold text-lg">14</span>
+                </div>
+                <div class="text-center p-2 rounded-lg text-gray-400">
+                    <span class="block text-xs">MAR</span>
+                    <span class="block font-bold text-lg">15</span>
+                </div>
+                <div class="text-center p-2 rounded-lg text-gray-400">
+                    <span class="block text-xs">MIE</span>
+                    <span class="block font-bold text-lg">16</span>
+                </div>
+                <div class="text-center p-2 rounded-lg text-gray-400">
+                    <span class="block text-xs">JUE</span>
+                    <span class="block font-bold text-lg">17</span>
+                </div>
+                <div class="text-center p-2 rounded-lg text-gray-400">
+                    <span class="block text-xs">VIE</span>
+                    <span class="block font-bold text-lg">18</span>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <div class="p-4 border border-gray-200 rounded-xl flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold">Boxeo Técnico</h4>
+                        <p class="text-sm text-gray-500">07:00 AM • Cupos: 4/12</p>
+                    </div>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium">Lleno</button>
+                </div>
+                <div class="p-4 border-l-4 border-brand bg-white shadow-sm rounded-r-xl flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-black">Cross Training</h4>
+                        <p class="text-sm text-gray-500">18:00 PM • Cupos: 8/12</p>
+                    </div>
+                    <button class="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium shadow-lg shadow-gray-300">Reservar</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-profile" class="section-view hidden-section">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Perfil del Atleta</h2>
+                <button class="text-brand text-sm font-medium">Editar</button>
+            </div>
+
+            <div class="bg-gray-50 rounded-2xl p-5 mb-6">
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Composición Corporal</h3>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <span class="text-xs text-gray-500">Peso</span>
+                        <div class="font-black text-xl">75.5 <span class="text-xs font-normal text-gray-400">kg</span></div>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500">Altura</span>
+                        <div class="font-black text-xl">1.78 <span class="text-xs font-normal text-gray-400">m</span></div>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500">IMC</span>
+                        <div class="font-black text-xl text-green-600">23.8 <span class="text-xs font-normal text-gray-400">Normal</span></div>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500">% Grasa</span>
+                        <div class="font-black text-xl">18%</div>
+                    </div>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-1">
+                    <div class="bg-brand h-2 rounded-full" style="width: 75%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-400">
+                    <span>Inicio</span>
+                    <span>Meta</span>
+                </div>
+            </div>
+
+            <div class="border border-red-100 bg-red-50/50 rounded-xl p-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="ph ph-first-aid text-brand text-lg"></i>
+                    <h3 class="font-bold text-gray-800">Alerta Médica</h3>
+                </div>
+                <ul class="space-y-2 text-sm">
+                    <li class="flex items-start gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand mt-1.5"></span>
+                        <span class="text-gray-700">Asma inducida por ejercicio (Leve).</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand mt-1.5"></span>
+                        <span class="text-gray-700">Cirugía de rodilla derecha (2022).</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="fixed bottom-0 w-full bg-white border-t border-gray-100 pb-safe pt-2 px-6 flex justify-between items-center z-50 h-16 shadow-[0_-5px_15px_rgba(0,0,0,0.02)]">
+        <button onclick="navTo('home')" class="bottom-nav-item active flex flex-col items-center gap-1 text-gray-400 w-16" id="btn-home">
+            <i class="ph ph-house text-2xl"></i>
+            <span class="text-[10px] font-medium">Inicio</span>
+        </button>
+        <button onclick="navTo('agenda')" class="bottom-nav-item flex flex-col items-center gap-1 text-gray-400 w-16" id="btn-agenda">
+            <i class="ph ph-calendar-check text-2xl"></i>
+            <span class="text-[10px] font-medium">Agenda</span>
+        </button>
+        <button onclick="navTo('profile')" class="bottom-nav-item flex flex-col items-center gap-1 text-gray-400 w-16" id="btn-profile">
+            <i class="ph ph-user text-2xl"></i>
+            <span class="text-[10px] font-medium">Perfil</span>
+        </button>
+    </nav>
+
+    <script>
+        // Sistema de Roles
+        let currentRole = 'user'; 
+
+        function switchRole() {
+            const selector = document.getElementById('roleSwitcher');
+            currentRole = selector.value;
+            renderRoleBasedUI();
+        }
+
+        function renderRoleBasedUI() {
+            const trainerDash = document.getElementById('trainerDashboard');
+            const welcomeMsg = document.getElementById('welcomeMsg');
+            const userProgress = document.getElementById('userProgressSection');
+
+            if (currentRole === 'trainer') {
+                trainerDash.classList.remove('hidden');
+                userProgress.classList.add('hidden'); // Entrenador no ve su propio progreso, ve el global
+                welcomeMsg.innerText = "Panel de control - Entrenador";
+            } else {
+                trainerDash.classList.add('hidden');
+                userProgress.classList.remove('hidden');
+                welcomeMsg.innerText = "Tu constancia define tu éxito.";
+            }
+        }
+
+        // Navegación
+        function navTo(viewId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section-view').forEach(el => el.classList.add('hidden-section'));
+            // Mostrar la deseada
+            document.getElementById(`view-${viewId}`).classList.remove('hidden-section');
+            document.getElementById(`view-${viewId}`).classList.add('fade-in');
+
+            // Actualizar botones activos
+            document.querySelectorAll('.bottom-nav-item').forEach(btn => btn.classList.remove('active', 'text-brand'));
+            const activeBtn = document.getElementById(`btn-${viewId}`);
+            activeBtn.classList.add('active', 'text-brand');
+            activeBtn.classList.remove('text-gray-400');
+        }
+
+        // Inicialización
+        renderRoleBasedUI();
+    </script>
+</body>
+</html>
