@@ -20,22 +20,35 @@ export const useTrainerForClass = (date, time) => {
         const configRef = doc(db, 'system', `schedule_${dateKey}`);
         const configSnap = await getDoc(configRef);
 
+        let trainerId = null;
+
         if (configSnap.exists()) {
           const config = configSnap.data();
-          const trainerId = config.trainers?.[time];
+          trainerId = config.trainers?.[time];
+        }
 
-          if (trainerId) {
-            // Obtener datos del entrenador
-            const trainerRef = doc(db, 'users', trainerId);
-            const trainerSnap = await getDoc(trainerRef);
-            
-            if (trainerSnap.exists()) {
-              setTrainer({
-                id: trainerId,
-                name: trainerSnap.data().name,
-                email: trainerSnap.data().email
-              });
-            }
+        // Si no hay entrenador asignado, usar el primer entrenador creado como por defecto
+        if (!trainerId) {
+          const trainersSnapshot = await getDocs(
+            query(collection(db, 'users'), where('role', '==', 'trainer'))
+          );
+          
+          if (!trainersSnapshot.empty) {
+            trainerId = trainersSnapshot.docs[0].id;
+          }
+        }
+
+        // Obtener datos del entrenador
+        if (trainerId) {
+          const trainerRef = doc(db, 'users', trainerId);
+          const trainerSnap = await getDoc(trainerRef);
+          
+          if (trainerSnap.exists()) {
+            setTrainer({
+              id: trainerId,
+              name: trainerSnap.data().name,
+              email: trainerSnap.data().email
+            });
           }
         }
       } catch (error) {
