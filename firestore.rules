@@ -2,6 +2,12 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
+    // Función para verificar si el usuario es admin
+    function isAdmin(userId) {
+      return exists(/databases/$(database)/documents/users/$(userId)) &&
+             get(/databases/$(database)/documents/users/$(userId)).data.role == 'admin';
+    }
+    
     // Reglas por defecto - denegar acceso
     match /{document=**} {
       allow read, write: if false;
@@ -15,9 +21,11 @@ service cloud.firestore {
     }
 
     // ===== COLECCIÓN: users =====
+    // Los admins pueden leer todos los usuarios
     // Cada usuario puede leer y escribir su propio documento
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin(request.auth.uid));
+      allow write: if request.auth != null && request.auth.uid == userId;
       
       // Subcolecciones del usuario
       match /{document=**} {
