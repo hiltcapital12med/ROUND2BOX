@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { Users, CalendarCheck, ChartLine, Warning, Shield, Gear, Heartbeat, Clock } from '@phosphor-icons/react';
 import { db } from '../../../services/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import DailyReport from './reports/DailyReport';
 import WeeklyReport from './reports/WeeklyReport';
 import MonthlyReport from './reports/MonthlyReport';
@@ -21,6 +21,8 @@ export default function AdminDashboard() {
   const [activeModal, setActiveModal] = useState(null); // 'users', 'trainers', 'reports', 'config'
   const [allUsers, setAllUsers] = useState([]);
   const [reportType, setReportType] = useState(null); // 'daily', 'weekly', 'monthly'
+  const [editingTrainer, setEditingTrainer] = useState(null);
+  const [trainerFormData, setTrainerFormData] = useState({});
 
   useEffect(() => {
     loadAdminStats();
@@ -56,6 +58,62 @@ export default function AdminDashboard() {
       console.error('Error cargando estadísticas:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Funciones para gestión de entrenadores
+  const handleDeleteTrainer = async (trainerId) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este entrenador?')) {
+      try {
+        await deleteDoc(doc(db, 'users', trainerId));
+        setAllUsers(allUsers.filter(u => u.uid !== trainerId));
+        alert('Entrenador eliminado exitosamente');
+      } catch (error) {
+        console.error('Error eliminando entrenador:', error);
+        alert('Error al eliminar el entrenador');
+      }
+    }
+  };
+
+  const handleEditTrainer = (trainer) => {
+    setEditingTrainer(trainer.uid);
+    setTrainerFormData({
+      name: trainer.name || '',
+      email: trainer.email || '',
+      specialization: trainer.specialization || ''
+    });
+  };
+
+  const handleSaveTrainer = async () => {
+    if (!editingTrainer) return;
+    try {
+      await updateDoc(doc(db, 'users', editingTrainer), trainerFormData);
+      
+      // Actualizar en el estado local
+      setAllUsers(allUsers.map(u => 
+        u.uid === editingTrainer ? { ...u, ...trainerFormData } : u
+      ));
+      
+      setEditingTrainer(null);
+      setTrainerFormData({});
+      alert('Entrenador actualizado exitosamente');
+    } catch (error) {
+      console.error('Error actualizando entrenador:', error);
+      alert('Error al actualizar el entrenador');
+    }
+  };
+
+  // Función para eliminar usuario
+  const handleDeleteUser = async (userId) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+      try {
+        await deleteDoc(doc(db, 'users', userId));
+        setAllUsers(allUsers.filter(u => u.uid !== userId));
+        alert('Usuario eliminado exitosamente');
+      } catch (error) {
+        console.error('Error eliminando usuario:', error);
+        alert('Error al eliminar el usuario');
+      }
     }
   };
 
@@ -222,7 +280,12 @@ export default function AdminDashboard() {
                     <p className="text-white font-bold">{usr.name}</p>
                     <p className="text-white/60 text-sm">{usr.email}</p>
                   </div>
-                  <button className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700">Eliminar</button>
+                  <button 
+                    onClick={() => handleDeleteUser(usr.uid)}
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700"
+                  >
+                    Eliminar
+                  </button>
                 </div>
               ))}
             </div>
@@ -236,21 +299,92 @@ export default function AdminDashboard() {
           <div className="bg-brand-charcoal rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto border border-white/10">
             <div className="sticky top-0 bg-brand-charcoal border-b border-white/10 p-6 flex justify-between items-center">
               <h2 className="text-2xl font-bold text-white">Gestionar Entrenadores</h2>
-              <button onClick={() => setActiveModal(null)} className="text-white/60 hover:text-white">✕</button>
+              <button onClick={() => { setActiveModal(null); setEditingTrainer(null); }} className="text-white/60 hover:text-white">✕</button>
             </div>
             <div className="p-6 space-y-4">
-              {allUsers.filter(u => u.role === 'trainer').map((usr) => (
-                <div key={usr.uid} className="bg-black/20 p-4 rounded-xl flex justify-between items-center">
-                  <div>
-                    <p className="text-white font-bold">{usr.name}</p>
-                    <p className="text-white/60 text-sm">{usr.email}</p>
-                  </div>
-                  <div className="space-x-2">
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">Editar</button>
-                    <button className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700">Eliminar</button>
+              {editingTrainer ? (
+                // Formulario de edición
+                <div className="bg-black/40 p-6 rounded-xl border border-white/10">
+                  <h3 className="text-white font-bold mb-4">Editar Entrenador</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-white/80 text-sm mb-1">Nombre</label>
+                      <input 
+                        type="text" 
+                        value={trainerFormData.name}
+                        onChange={(e) => setTrainerFormData({...trainerFormData, name: e.target.value})}
+                        className="w-full px-3 py-2 bg-black/40 border border-white/20 rounded-lg text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-white/80 text-sm mb-1">Email</label>
+                      <input 
+                        type="email" 
+                        value={trainerFormData.email}
+                        onChange={(e) => setTrainerFormData({...trainerFormData, email: e.target.value})}
+                        className="w-full px-3 py-2 bg-black/40 border border-white/20 rounded-lg text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-white/80 text-sm mb-1">Especialización</label>
+                      <input 
+                        type="text" 
+                        value={trainerFormData.specialization}
+                        onChange={(e) => setTrainerFormData({...trainerFormData, specialization: e.target.value})}
+                        placeholder="Ej: Crossfit, Powerlifting"
+                        className="w-full px-3 py-2 bg-black/40 border border-white/20 rounded-lg text-white"
+                      />
+                    </div>
+                    <div className="flex gap-2 pt-2">
+                      <button 
+                        onClick={handleSaveTrainer}
+                        className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-bold"
+                      >
+                        Guardar
+                      </button>
+                      <button 
+                        onClick={() => setEditingTrainer(null)}
+                        className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
                   </div>
                 </div>
-              ))}
+              ) : (
+                // Lista de entrenadores
+                <>
+                  {allUsers.filter(u => u.role === 'trainer').length === 0 ? (
+                    <p className="text-white/60 text-center py-4">No hay entrenadores registrados</p>
+                  ) : (
+                    allUsers.filter(u => u.role === 'trainer').map((usr) => (
+                      <div key={usr.uid} className="bg-black/20 p-4 rounded-xl flex justify-between items-center">
+                        <div>
+                          <p className="text-white font-bold">{usr.name}</p>
+                          <p className="text-white/60 text-sm">{usr.email}</p>
+                          {usr.specialization && (
+                            <p className="text-brand-neon text-xs mt-1">📌 {usr.specialization}</p>
+                          )}
+                        </div>
+                        <div className="space-x-2">
+                          <button 
+                            onClick={() => handleEditTrainer(usr)}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+                          >
+                            Editar
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteTrainer(usr.uid)}
+                            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
