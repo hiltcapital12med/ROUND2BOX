@@ -4,6 +4,9 @@ import { useAuth } from '../../../context/AuthContext';
 import { Users, CalendarCheck, ChartLine, Warning, Shield, Gear, Heartbeat, Clock } from '@phosphor-icons/react';
 import { db } from '../../../services/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
+import DailyReport from './reports/DailyReport';
+import WeeklyReport from './reports/WeeklyReport';
+import MonthlyReport from './reports/MonthlyReport';
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -17,6 +20,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeModal, setActiveModal] = useState(null); // 'users', 'trainers', 'reports', 'config'
   const [allUsers, setAllUsers] = useState([]);
+  const [reportType, setReportType] = useState(null); // 'daily', 'weekly', 'monthly'
 
   useEffect(() => {
     loadAdminStats();
@@ -255,24 +259,50 @@ export default function AdminDashboard() {
       {/* Modal: Reportes */}
       {activeModal === 'reports' && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-brand-charcoal rounded-2xl max-w-md w-full border border-white/10">
-            <div className="bg-brand-charcoal border-b border-white/10 p-6 flex justify-between items-center">
+          <div className="bg-brand-charcoal rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-y-auto border border-white/10">
+            <div className="sticky top-0 bg-brand-charcoal border-b border-white/10 p-6 flex justify-between items-center">
               <h2 className="text-2xl font-bold text-white">Reportes y Análisis</h2>
-              <button onClick={() => setActiveModal(null)} className="text-white/60 hover:text-white">✕</button>
+              <button onClick={() => { setActiveModal(null); setReportType(null); }} className="text-white/60 hover:text-white">✕</button>
             </div>
-            <div className="p-6 space-y-3">
-              <button className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold">
-                📊 Reporte de Asistencia Mensual
-              </button>
-              <button className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold">
-                📈 Reporte de Progreso de Atletas
-              </button>
-              <button className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold">
-                👥 Reporte de Inactividad
-              </button>
-              <button className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-bold">
-                ⬇️ Descargar como CSV
-              </button>
+            
+            <div className="p-6">
+              {!reportType ? (
+                // Seleccionar tipo de reporte
+                <div className="space-y-3">
+                  <button 
+                    onClick={() => setReportType('daily')}
+                    className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold text-left transition-all hover:shadow-lg"
+                  >
+                    📅 Reporte Diario - Ver quién reservó cada clase
+                  </button>
+                  <button 
+                    onClick={() => setReportType('weekly')}
+                    className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-bold text-left transition-all hover:shadow-lg"
+                  >
+                    📊 Reporte Semanal - Gráfico de asistencia
+                  </button>
+                  <button 
+                    onClick={() => setReportType('monthly')}
+                    className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-bold text-left transition-all hover:shadow-lg"
+                  >
+                    📈 Reporte Mensual - Tendencias generales
+                  </button>
+                </div>
+              ) : (
+                // Mostrar reporte seleccionado
+                <div className="space-y-4">
+                  <button 
+                    onClick={() => setReportType(null)}
+                    className="text-white/70 hover:text-white text-sm flex items-center gap-1 mb-4"
+                  >
+                    ← Volver a reportes
+                  </button>
+                  
+                  {reportType === 'daily' && <DailyReport />}
+                  {reportType === 'weekly' && <WeeklyReport />}
+                  {reportType === 'monthly' && <MonthlyReport />}
+                </div>
+              )}
             </div>
           </div>
         </div>
