@@ -146,6 +146,9 @@ function MainApp() {
   const { user, role, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('home'); // Estado: ¿Qué pestaña veo?
 
+  // DEBUG: Ver qué rol está siendo usado
+  console.log('📍 MainApp - Role actual:', role);
+
   return (
     <AppLayout 
       activeTab={activeTab} 

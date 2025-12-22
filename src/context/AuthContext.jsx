@@ -37,6 +37,7 @@ export function AuthProvider({ children }) {
 
       if (userSnap.exists()) {
         const realRole = userSnap.data().role || 'user';
+        console.log('✅ loginWithGoogle - User exists in DB:', { uid: firebaseUser.uid, realRole, requestedRole });
 
         // 🛑 VALIDACIÓN ESTRICTA
         if (realRole !== requestedRole) {
@@ -60,6 +61,7 @@ export function AuthProvider({ children }) {
       } else {
         // Registro nuevo
         const roleToAssign = requestedRole || 'user';
+        console.log('✨ loginWithGoogle - Creating new user:', { uid: firebaseUser.uid, role: roleToAssign });
         await setDoc(userRef, {
           email: firebaseUser.email,
           name: firebaseUser.displayName,
@@ -94,7 +96,9 @@ export function AuthProvider({ children }) {
         const userRef = doc(db, "users", currentUser.uid);
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
-          setRole(userSnap.data().role);
+          const userRole = userSnap.data().role;
+          console.log('🔐 AuthContext - User loaded from DB:', { uid: currentUser.uid, role: userRole });
+          setRole(userRole);
           setUser(currentUser);
         } else {
             // Usuario fantasma (en Auth pero no en BD), limpiar
