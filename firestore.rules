@@ -23,8 +23,9 @@ service cloud.firestore {
     // ===== COLECCIÓN: users =====
     // Los admins pueden leer y escribir todos los usuarios
     // Cada usuario puede leer y escribir su propio documento
+    // Los usuarios autenticados pueden leer información básica de otros usuarios (nombre, email, role)
     match /users/{userId} {
-      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin(request.auth.uid));
+      allow read: if request.auth != null;
       allow write: if request.auth != null && (request.auth.uid == userId || isAdmin(request.auth.uid));
       
       // Subcolecciones del usuario
@@ -54,9 +55,10 @@ service cloud.firestore {
     }
 
     // ===== COLECCIÓN: system =====
-    // Solo admins pueden leer y escribir configuración del sistema
+    // Admins pueden leer y escribir
+    // Usuarios autenticados pueden leer la configuración de horarios
     match /system/{document=**} {
-      allow read: if request.auth != null && isAdmin(request.auth.uid);
+      allow read: if request.auth != null;
       allow write: if request.auth != null && isAdmin(request.auth.uid);
     }
 
