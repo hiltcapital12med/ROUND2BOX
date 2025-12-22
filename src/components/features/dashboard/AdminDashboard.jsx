@@ -452,7 +452,7 @@ export default function AdminDashboard() {
               <button onClick={() => setActiveModal(null)} className="text-white/60 hover:text-white">✕</button>
             </div>
             <div className="p-6">
-              <ScheduleConfig />
+              <ScheduleConfig onClose={() => setActiveModal(null)} />
             </div>
           </div>
         </div>
