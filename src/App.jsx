@@ -9,6 +9,7 @@ import AgendaView from './components/features/agenda/AgendaView';
 import NotificationManager from './components/features/notifications/NotificationManager';
 import ProgressRing from './components/features/dashboard/ProgressRing';
 import AthleteHomeDashboard from './components/features/dashboard/AthleteHomeDashboard';
+import AdminDashboard from './components/features/dashboard/AdminDashboard';
 
 // --- PANTALLA DE LOGIN (Con Error Global) ---
 function LoginScreen() {
@@ -158,7 +159,10 @@ function MainApp() {
       
       {activeTab === 'home' && (
         (
-          role === 'trainer' ? (
+          role === 'admin' ? (
+            // --- DASHBOARD ADMIN ---
+            <AdminDashboard />
+          ) : role === 'trainer' ? (
             // --- DASHBOARD COACH ---
             <div className="flex flex-col h-full">
               {/* ENCABEZADO COACH */}
