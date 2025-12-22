@@ -1,20 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../services/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { SCHEDULES } from '../../../utils/agendaConfig';
-import { Eye, EyeSlash, CheckCircle, CaretLeft, CaretRight } from '@phosphor-icons/react';
+import { Eye, EyeSlash, CheckCircle, CaretLeft, CaretRight, User } from '@phosphor-icons/react';
 import { format, addDays, startOfWeek, isSameDay, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export default function ScheduleConfig({ onClose }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [config, setConfig] = useState({});
+  const [trainers, setTrainers] = useState([]);
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     loadConfig();
+    loadTrainers();
   }, []);
+
+  const loadTrainers = async () => {
+    try {
+      const trainersSnapshot = await getDocs(
+        query(collection(db, 'users'), where('role', '==', 'trainer'))
+      );
+      const trainersData = trainersSnapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        name: doc.data().name,
+        email: doc.data().email
+      }));
+      setTrainers(trainersData);
+    } catch (error) {
+      console.error('Error cargando entrenadores:', error);
+    }
+  };
 
   const loadConfig = async () => {
     try {
@@ -80,6 +99,28 @@ export default function ScheduleConfig({ onClose }) {
     setSaved(false);
   };
 
+  const handleAssignTrainer = (scheduleId, trainerId) => {
+    const dateKey = getDateKey(selectedDate);
+    const dayConfig = getDayConfig(selectedDate);
+    
+    setConfig(prev => ({
+      ...prev,
+      [dateKey]: {
+        ...dayConfig,
+        trainers: {
+          ...dayConfig.trainers,
+          [scheduleId]: trainerId
+        }
+      }
+    }));
+    setSaved(false);
+  };
+
+  const getTrainerName = (trainerId) => {
+    const trainer = trainers.find(t => t.id === trainerId);
+    return trainer ? trainer.name : 'Sin asignar';
+  };
+
   const handleSaveConfig = async () => {
     try {
       setLoading(true);
@@ -91,6 +132,7 @@ export default function ScheduleConfig({ onClose }) {
           await setDoc(docRef, {
             date: dateKey,
             enabled: dayConfig.enabled || {},
+            trainers: dayConfig.trainers || {},
             capacity: dayConfig.capacity || 4
           });
         }
@@ -197,18 +239,21 @@ export default function ScheduleConfig({ onClose }) {
         </h4>
         
         {dayOfWeek !== 0 ? (
-          <div className="grid grid-cols-1 gap-2">
+          <div className="grid grid-cols-1 gap-3">
             {schedules.map(slot => (
               <div 
                 key={slot.id}
-                onClick={() => handleToggleClass(slot.id)}
-                className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                className={`p-4 rounded-lg border-2 transition-all ${
                   dayConfig.enabled?.[slot.id] 
                     ? 'bg-brand-neon/10 border-brand-neon' 
                     : 'bg-black/40 border-white/10 opacity-50'
                 }`}
               >
-                <div className="flex items-center justify-between">
+                {/* Header - Toggle */}
+                <div 
+                  onClick={() => handleToggleClass(slot.id)}
+                  className="flex items-center justify-between mb-2 cursor-pointer"
+                >
                   <div className="flex items-center gap-3">
                     <div className={`text-xl ${dayConfig.enabled?.[slot.id] ? 'text-brand-neon' : 'text-white/40'}`}>
                       {dayConfig.enabled?.[slot.id] ? '✓' : '✗'}
@@ -226,6 +271,27 @@ export default function ScheduleConfig({ onClose }) {
                     )}
                   </div>
                 </div>
+
+                {/* Asignación de Entrenador */}
+                {dayConfig.enabled?.[slot.id] && (
+                  <div className="ml-8 bg-black/30 p-3 rounded border border-white/10">
+                    <label className="block text-white/80 text-xs font-bold mb-2 flex items-center gap-1">
+                      <User size={14} /> Entrenador
+                    </label>
+                    <select
+                      value={dayConfig.trainers?.[slot.id] || ''}
+                      onChange={(e) => handleAssignTrainer(slot.id, e.target.value)}
+                      className="w-full px-2 py-1 bg-black/40 border border-white/20 rounded text-white text-sm"
+                    >
+                      <option value="">Sin asignar</option>
+                      {trainers.map(trainer => (
+                        <option key={trainer.id} value={trainer.id}>
+                          {trainer.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
             ))}
           </div>
