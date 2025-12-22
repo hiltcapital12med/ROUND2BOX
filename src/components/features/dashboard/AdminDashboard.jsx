@@ -15,6 +15,8 @@ export default function AdminDashboard() {
     inactiveUsers: 0
   });
   const [loading, setLoading] = useState(true);
+  const [activeModal, setActiveModal] = useState(null); // 'users', 'trainers', 'reports', 'config'
+  const [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
     loadAdminStats();
@@ -22,9 +24,16 @@ export default function AdminDashboard() {
 
   const loadAdminStats = async () => {
     try {
-      // Obtener usuarios
+      // Obtener todos los usuarios
       const usersSnapshot = await getDocs(collection(db, 'users'));
-      const totalUsers = usersSnapshot.size;
+      const allUsersData = usersSnapshot.docs.map(doc => ({ ...doc.data(), uid: doc.id }));
+
+      // Guardar todos los usuarios
+      setAllUsers(allUsersData);
+
+      // Contar solo atletas (role === 'user')
+      const athletes = allUsersData.filter(user => user.role === 'user');
+      const totalUsers = athletes.length;
 
       // Simular datos (en producción, estos vendrían de Firestore)
       const activeUsers = Math.floor(totalUsers * 0.8);
@@ -123,7 +132,7 @@ export default function AdminDashboard() {
       {/* ACCIONES ADMINISTRATIVAS */}
       <div className="space-y-4 mb-8 animate-fade-in-up">
         {/* Gestionar Usuarios */}
-        <button className="w-full group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-brand-red/30 rounded-2xl p-6 overflow-hidden transition-all hover:border-brand-red/60">
+        <button onClick={() => setActiveModal('users')} className="w-full group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-brand-red/30 rounded-2xl p-6 overflow-hidden transition-all hover:border-brand-red/60">
           <div className="absolute inset-0 bg-gradient-to-r from-brand-red/0 via-brand-red/10 to-brand-red/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
           <div className="relative z-10 flex justify-between items-center">
             <div className="text-left">
@@ -135,7 +144,7 @@ export default function AdminDashboard() {
         </button>
 
         {/* Gestionar Entrenadores */}
-        <button className="w-full group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-brand-gold/30 rounded-2xl p-6 overflow-hidden transition-all hover:border-brand-gold/60">
+        <button onClick={() => setActiveModal('trainers')} className="w-full group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-brand-gold/30 rounded-2xl p-6 overflow-hidden transition-all hover:border-brand-gold/60">
           <div className="absolute inset-0 bg-gradient-to-r from-brand-gold/0 via-brand-gold/10 to-brand-gold/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
           <div className="relative z-10 flex justify-between items-center">
             <div className="text-left">
@@ -147,7 +156,7 @@ export default function AdminDashboard() {
         </button>
 
         {/* Reportes y Análisis */}
-        <button className="w-full group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-blue-500/30 rounded-2xl p-6 overflow-hidden transition-all hover:border-blue-500/60">
+        <button onClick={() => setActiveModal('reports')} className="w-full group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-blue-500/30 rounded-2xl p-6 overflow-hidden transition-all hover:border-blue-500/60">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
           <div className="relative z-10 flex justify-between items-center">
             <div className="text-left">
@@ -159,7 +168,7 @@ export default function AdminDashboard() {
         </button>
 
         {/* Configuración del Sistema */}
-        <button className="w-full group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-white/10 rounded-2xl p-6 overflow-hidden transition-all hover:border-white/30">
+        <button onClick={() => setActiveModal('config')} className="w-full group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-white/10 rounded-2xl p-6 overflow-hidden transition-all hover:border-white/30">
           <div className="relative z-10 flex justify-between items-center">
             <div className="text-left">
               <h3 className="text-white font-bold">Configuración del Sistema</h3>
@@ -191,6 +200,112 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* MODALES DE GESTIÓN */}
+      
+      {/* Modal: Gestionar Usuarios */}
+      {activeModal === 'users' && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-brand-charcoal rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto border border-white/10">
+            <div className="sticky top-0 bg-brand-charcoal border-b border-white/10 p-6 flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-white">Gestionar Usuarios</h2>
+              <button onClick={() => setActiveModal(null)} className="text-white/60 hover:text-white">✕</button>
+            </div>
+            <div className="p-6 space-y-4">
+              {allUsers.filter(u => u.role === 'user').map((usr) => (
+                <div key={usr.uid} className="bg-black/20 p-4 rounded-xl flex justify-between items-center">
+                  <div>
+                    <p className="text-white font-bold">{usr.name}</p>
+                    <p className="text-white/60 text-sm">{usr.email}</p>
+                  </div>
+                  <button className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700">Eliminar</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Gestionar Entrenadores */}
+      {activeModal === 'trainers' && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-brand-charcoal rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto border border-white/10">
+            <div className="sticky top-0 bg-brand-charcoal border-b border-white/10 p-6 flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-white">Gestionar Entrenadores</h2>
+              <button onClick={() => setActiveModal(null)} className="text-white/60 hover:text-white">✕</button>
+            </div>
+            <div className="p-6 space-y-4">
+              {allUsers.filter(u => u.role === 'trainer').map((usr) => (
+                <div key={usr.uid} className="bg-black/20 p-4 rounded-xl flex justify-between items-center">
+                  <div>
+                    <p className="text-white font-bold">{usr.name}</p>
+                    <p className="text-white/60 text-sm">{usr.email}</p>
+                  </div>
+                  <div className="space-x-2">
+                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">Editar</button>
+                    <button className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700">Eliminar</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Reportes */}
+      {activeModal === 'reports' && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-brand-charcoal rounded-2xl max-w-md w-full border border-white/10">
+            <div className="bg-brand-charcoal border-b border-white/10 p-6 flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-white">Reportes y Análisis</h2>
+              <button onClick={() => setActiveModal(null)} className="text-white/60 hover:text-white">✕</button>
+            </div>
+            <div className="p-6 space-y-3">
+              <button className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold">
+                📊 Reporte de Asistencia Mensual
+              </button>
+              <button className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold">
+                📈 Reporte de Progreso de Atletas
+              </button>
+              <button className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold">
+                👥 Reporte de Inactividad
+              </button>
+              <button className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-bold">
+                ⬇️ Descargar como CSV
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Configuración */}
+      {activeModal === 'config' && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-brand-charcoal rounded-2xl max-w-md w-full border border-white/10">
+            <div className="bg-brand-charcoal border-b border-white/10 p-6 flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-white">Configuración del Sistema</h2>
+              <button onClick={() => setActiveModal(null)} className="text-white/60 hover:text-white">✕</button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-white font-bold text-sm mb-2">Capacidad máxima de clase</label>
+                <input type="number" defaultValue="4" className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-white" />
+              </div>
+              <div>
+                <label className="block text-white font-bold text-sm mb-2">Horario de apertura (horas)</label>
+                <input type="time" defaultValue="06:30" className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-white" />
+              </div>
+              <div>
+                <label className="block text-white font-bold text-sm mb-2">Horario de cierre (horas)</label>
+                <input type="time" defaultValue="20:00" className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-white" />
+              </div>
+              <button className="w-full px-4 py-3 bg-brand-gold text-black rounded-lg hover:bg-yellow-500 font-bold">
+                💾 Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
