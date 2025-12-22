@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Reglas por defecto - denegar acceso
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ===== COLECCIÓN: schedule =====
+    // Usuarios autenticados pueden leer y escribir en el horario
+    match /schedule/{date} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ===== COLECCIÓN: users =====
+    // Cada usuario puede leer y escribir su propio documento
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      // Subcolecciones del usuario
+      match /{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // ===== COLECCIÓN: attendance =====
+    // Los usuarios pueden leer su propio historial de asistencia
+    match /attendance/{date} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ===== COLECCIÓN: progress =====
+    // Los usuarios pueden leer su propio progreso
+    match /progress/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+      
+      // Subcolecciones de progreso
+      match /{document=**} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+  }
+}
