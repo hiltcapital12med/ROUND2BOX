@@ -53,5 +53,12 @@ service cloud.firestore {
       }
     }
 
+    // ===== COLECCIÓN: system =====
+    // Solo admins pueden leer y escribir configuración del sistema
+    match /system/{document=**} {
+      allow read: if request.auth != null && isAdmin(request.auth.uid);
+      allow write: if request.auth != null && isAdmin(request.auth.uid);
+    }
+
   }
 }

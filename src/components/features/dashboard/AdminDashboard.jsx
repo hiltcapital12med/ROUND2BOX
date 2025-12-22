@@ -7,6 +7,7 @@ import { collection, getDocs, query, where, deleteDoc, doc, updateDoc } from 'fi
 import DailyReport from './reports/DailyReport';
 import WeeklyReport from './reports/WeeklyReport';
 import MonthlyReport from './reports/MonthlyReport';
+import ScheduleConfig from './ScheduleConfig';
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -445,27 +446,13 @@ export default function AdminDashboard() {
       {/* Modal: Configuración */}
       {activeModal === 'config' && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-brand-charcoal rounded-2xl max-w-md w-full border border-white/10">
-            <div className="bg-brand-charcoal border-b border-white/10 p-6 flex justify-between items-center">
+          <div className="bg-brand-charcoal rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto border border-white/10">
+            <div className="sticky top-0 bg-brand-charcoal border-b border-white/10 p-6 flex justify-between items-center">
               <h2 className="text-2xl font-bold text-white">Configuración del Sistema</h2>
               <button onClick={() => setActiveModal(null)} className="text-white/60 hover:text-white">✕</button>
             </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-white font-bold text-sm mb-2">Capacidad máxima de clase</label>
-                <input type="number" defaultValue="4" className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-white" />
-              </div>
-              <div>
-                <label className="block text-white font-bold text-sm mb-2">Horario de apertura (horas)</label>
-                <input type="time" defaultValue="06:30" className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-white" />
-              </div>
-              <div>
-                <label className="block text-white font-bold text-sm mb-2">Horario de cierre (horas)</label>
-                <input type="time" defaultValue="20:00" className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-white" />
-              </div>
-              <button className="w-full px-4 py-3 bg-brand-gold text-black rounded-lg hover:bg-yellow-500 font-bold">
-                💾 Guardar Cambios
-              </button>
+            <div className="p-6">
+              <ScheduleConfig />
             </div>
           </div>
         </div>
