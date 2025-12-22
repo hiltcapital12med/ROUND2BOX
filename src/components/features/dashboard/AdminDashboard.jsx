@@ -73,7 +73,7 @@ export default function AdminDashboard() {
 
         {/* Usuarios Activos */}
         <div className="bg-gradient-to-br from-brand-gold/20 to-brand-gold/5 border border-brand-gold/30 rounded-2xl p-4 hover:border-brand-gold/60 transition-all">
-          <Activity size={24} className="text-brand-gold mb-3" weight="duotone" />
+          <Users size={24} className="text-brand-gold mb-3" weight="duotone" />
           <span className="block text-3xl font-black text-white">{stats.activeUsers}</span>
           <span className="text-xs text-white/60">Activos Hoy</span>
         </div>

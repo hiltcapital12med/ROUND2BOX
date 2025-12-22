@@ -147,7 +147,11 @@ function MainApp() {
   const [activeTab, setActiveTab] = useState('home'); // Estado: ¿Qué pestaña veo?
 
   // DEBUG: Ver qué rol está siendo usado
-  console.log('📍 MainApp - Role actual:', role);
+  console.log('='.repeat(50));
+  console.log('🎯 MAINAPP RENDERIZADO');
+  console.log('Usuario:', user?.email);
+  console.log('Rol:', role);
+  console.log('='.repeat(50));
 
   return (
     <AppLayout 
