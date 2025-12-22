@@ -97,16 +97,10 @@ export default function DailyReport() {
                     key={idx}
                     className="flex justify-between items-center bg-black/40 p-3 rounded-lg border-l-2 border-brand-neon"
                   >
-                    <div>
-                      <p className="text-white font-semibold">{item.userName}</p>
-                      <p className="text-white/60 text-sm">{item.userId}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-brand-neon font-bold">
-                        {item.reservations}/{item.capacity}
-                      </p>
-                      <p className="text-white/60 text-sm">ocupación</p>
-                    </div>
+                    <p className="text-white font-semibold">{item.userName}</p>
+                    <span className="text-xs bg-brand-neon text-black px-3 py-1 rounded-full font-bold">
+                      Inscrito
+                    </span>
                   </div>
                 ))}
               </div>
@@ -117,16 +111,13 @@ export default function DailyReport() {
 
       {dailyData.length > 0 && (
         <div className="mt-4 p-4 bg-black/40 rounded-lg border border-white/10">
-          <p className="text-white/80">
-            <span className="font-bold text-brand-neon">{dailyData.length}</span> clases totales
+          <p className="text-white/80 mb-2">
+            <span className="font-bold text-brand-neon">{dailyData.length}</span> asistentes inscrit{dailyData.length !== 1 ? 'os' : 'o'}
           </p>
           <p className="text-white/80">
-            Ocupación promedio: 
+            Ocupación de la clase: 
             <span className="font-bold text-brand-neon ml-2">
-              {(
-                dailyData.reduce((sum, d) => sum + (d.reservations / d.capacity || 0), 0) / 
-                dailyData.length * 100
-              ).toFixed(1)}%
+              {dailyData.length}/4 cupos
             </span>
           </p>
         </div>
