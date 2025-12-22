@@ -51,18 +51,45 @@ export default function AgendaView() {
     const scheduleRef = doc(db, "schedule", dateKey);
     
     try {
+      // Obtener datos actuales del documento
+      const snap = await getDoc(scheduleRef);
+      const currentData = snap.exists() ? snap.data() : {};
+      
+      // Obtener lista actual de reservas para ese horario
+      const currentList = currentData[slotTime] || [];
+      
+      // Crear nueva reserva
+      const newBooking = {
+        uid: user.uid,
+        name: user.displayName,
+        photo: user.photoURL,
+        status: 'booked'
+      };
+      
+      // Verificar que el usuario no esté ya inscrito
+      const alreadyBooked = currentList.some(b => b.uid === user.uid);
+      if (alreadyBooked) {
+        alert("Ya estás inscrito en esta clase.");
+        return;
+      }
+      
+      // Verificar capacidad
+      if (currentList.length >= CLASS_CAPACITY) {
+        alert("La clase está llena.");
+        return;
+      }
+      
+      // Actualizar con el nuevo booking
+      const updatedList = [...currentList, newBooking];
+      
       await setDoc(scheduleRef, {
-        [slotTime]: arrayUnion({
-            uid: user.uid,
-            name: user.displayName,
-            photo: user.photoURL,
-            status: 'booked'
-        })
+        [slotTime]: updatedList
       }, { merge: true });
+      
       loadSchedule();
     } catch (error) {
       console.error("Error reservando:", error);
-      alert("Error al reservar.");
+      alert("Error al reservar. Intenta de nuevo.");
     }
   };
 
@@ -70,30 +97,48 @@ export default function AgendaView() {
     const dateKey = selectedDate.toISOString().split('T')[0];
     const scheduleRef = doc(db, "schedule", dateKey);
     
-    const currentList = bookings[slotTime] || [];
-    const newList = currentList.filter(u => u.uid !== user.uid);
+    try {
+      const snap = await getDoc(scheduleRef);
+      if (!snap.exists()) {
+        alert("No hay reservas para este día.");
+        return;
+      }
 
-    await updateDoc(scheduleRef, {
+      const currentList = snap.data()[slotTime] || [];
+      const newList = currentList.filter(u => u.uid !== user.uid);
+
+      await updateDoc(scheduleRef, {
         [slotTime]: newList
-    });
-    loadSchedule();
+      });
+      
+      loadSchedule();
+    } catch (error) {
+      console.error("Error cancelando:", error);
+      alert("Error al cancelar la reserva.");
+    }
   };
 
   const toggleAttendance = async (slotTime, studentUid, currentStatus) => {
     const dateKey = selectedDate.toISOString().split('T')[0];
     const scheduleRef = doc(db, "schedule", dateKey);
     
-    const currentList = bookings[slotTime] || [];
-    const isAttended = currentStatus !== 'attended';
-    
-    const updatedList = currentList.map(student => {
+    try {
+      const snap = await getDoc(scheduleRef);
+      if (!snap.exists()) {
+        alert("No hay datos de reservas para este día.");
+        return;
+      }
+
+      const currentList = snap.data()[slotTime] || [];
+      const isAttended = currentStatus !== 'attended';
+      
+      const updatedList = currentList.map(student => {
         if (student.uid === studentUid) {
-            return { ...student, status: isAttended ? 'attended' : 'booked' };
+          return { ...student, status: isAttended ? 'attended' : 'booked' };
         }
         return student;
-    });
+      });
 
-    try {
       await updateDoc(scheduleRef, { [slotTime]: updatedList });
       
       // ✅ REGISTRAR ASISTENCIA EN EL SERVICIO DE PROGRESO
@@ -106,6 +151,7 @@ export default function AgendaView() {
       loadSchedule();
     } catch (error) {
       console.error('Error actualizando asistencia:', error);
+      alert("Error al actualizar asistencia.");
     }
   };
 
