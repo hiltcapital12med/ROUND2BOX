@@ -21,12 +21,20 @@ export default function ScheduleConfig({ onClose }) {
       const configRef = doc(db, 'system', 'config');
       const configSnap = await getDoc(configRef);
       
+      let loadedConfig = {};
+      
       if (configSnap.exists()) {
-        setConfig(configSnap.data());
-      } else {
-        // Inicializar config vacío
-        setConfig({});
+        const allSchedules = configSnap.data();
+        // Parsear el config para obtener la estructura correcta
+        for (const [key, value] of Object.entries(allSchedules)) {
+          if (key.startsWith('schedule_')) {
+            const dateKey = key.replace('schedule_', '');
+            loadedConfig[dateKey] = value;
+          }
+        }
       }
+      
+      setConfig(loadedConfig);
     } catch (error) {
       console.error('Error cargando configuración:', error);
     } finally {
@@ -76,10 +84,16 @@ export default function ScheduleConfig({ onClose }) {
     try {
       setLoading(true);
       
-      // Guardar todos los cambios
+      // Guardar cada fecha como un documento separado en system/
       for (const [dateKey, dayConfig] of Object.entries(config)) {
-        const configRef = doc(db, 'system', dateKey);
-        await setDoc(configRef, dayConfig, { merge: true });
+        if (dateKey && dayConfig && typeof dayConfig === 'object') {
+          const docRef = doc(db, 'system', `schedule_${dateKey}`);
+          await setDoc(docRef, {
+            date: dateKey,
+            enabled: dayConfig.enabled || {},
+            capacity: dayConfig.capacity || 4
+          });
+        }
       }
       
       setSaved(true);
@@ -88,7 +102,7 @@ export default function ScheduleConfig({ onClose }) {
       }, 1500);
     } catch (error) {
       console.error('Error guardando configuración:', error);
-      alert('Error al guardar la configuración');
+      alert('Error al guardar la configuración: ' + error.message);
     } finally {
       setLoading(false);
     }
