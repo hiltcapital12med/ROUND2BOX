@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../../services/firebase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { startOfMonth, endOfMonth, eachWeekOfInterval, startOfDay, endOfDay, format } from 'date-fns';
@@ -35,27 +35,34 @@ export default function MonthlyReport() {
 
         const dayStart = startOfDay(weekStart);
         const dayEnd = endOfDay(weekEnd > end ? end : weekEnd);
+        
+        let weekReservations = 0;
+        let weekClasses = 0;
 
-        const scheduleRef = collection(db, 'schedule');
-        const q = query(
-          scheduleRef,
-          where('date', '>=', dayStart),
-          where('date', '<=', dayEnd)
-        );
+        // Iterar por cada día de la semana
+        for (let d = new Date(dayStart); d <= dayEnd; d.setDate(d.getDate() + 1)) {
+          const dayKey = format(d, 'yyyy-MM-dd');
+          const scheduleRef = doc(db, 'schedule', dayKey);
+          const scheduleSnap = await getDoc(scheduleRef);
+          
+          if (scheduleSnap.exists()) {
+            const scheduleData = scheduleSnap.data();
+            for (const [time, reservations] of Object.entries(scheduleData)) {
+              if (Array.isArray(reservations)) {
+                weekReservations += reservations.length;
+                weekClasses++;
+              }
+            }
+          }
+        }
 
-        const snapshot = await getDocs(q);
-        const reservations = snapshot.docs.reduce(
-          (sum, doc) => sum + (doc.data().reservations?.length || 0),
-          0
-        );
-
-        totalReservations += reservations;
+        totalReservations += weekReservations;
 
         chartData.push({
           week: `Sem ${format(weekStart, 'w', { locale: es })}`,
           date: `${format(weekStart, 'd/M')} - ${format(weekEnd > end ? end : weekEnd, 'd/M')}`,
-          reservations: reservations,
-          classes: snapshot.docs.length,
+          reservations: weekReservations,
+          classes: weekClasses,
         });
       }
 

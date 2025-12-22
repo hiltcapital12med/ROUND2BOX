@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../../services/firebase';
 import { format, startOfDay, endOfDay } from 'date-fns';
 
@@ -15,43 +15,34 @@ export default function DailyReport() {
   const loadDailyReport = async () => {
     try {
       setLoading(true);
-      const dateObj = new Date(selectedDate);
-      const start = startOfDay(dateObj);
-      const end = endOfDay(dateObj);
-
-      // Obtener todas las reservas del día
-      const scheduleRef = collection(db, 'schedule');
-      const q = query(
-        scheduleRef,
-        where('date', '>=', start),
-        where('date', '<=', end)
-      );
-
-      const snapshot = await getDocs(q);
+      const dateKey = selectedDate; // Formato YYYY-MM-DD
+      
+      // Obtener el documento de schedule de esa fecha
+      const scheduleRef = doc(db, 'schedule', dateKey);
+      const scheduleSnap = await getDoc(scheduleRef);
+      
       const data = [];
-
-      for (const doc of snapshot.docs) {
-        const schedule = doc.data();
+      
+      if (scheduleSnap.exists()) {
+        const scheduleData = scheduleSnap.data();
         
-        // Obtener info del usuario
-        const usersRef = collection(db, 'users');
-        const userQuery = query(usersRef, where('__name__', '==', schedule.userId));
-        const userSnapshot = await getDocs(userQuery);
-        
-        let userName = 'Usuario Desconocido';
-        if (!userSnapshot.empty) {
-          userName = userSnapshot.docs[0].data().name || 'Sin nombre';
+        // Iterar sobre todos los horarios (claves del documento)
+        for (const [time, reservations] of Object.entries(scheduleData)) {
+          if (Array.isArray(reservations) && reservations.length > 0) {
+            // Por cada persona reservada
+            for (const reservation of reservations) {
+              data.push({
+                time: time,
+                userName: reservation.name || 'Usuario Desconocido',
+                userId: reservation.uid,
+                capacity: 4, // Capacidad estándar
+                status: reservation.status || 'booked'
+              });
+            }
+          }
         }
-
-        data.push({
-          time: schedule.time,
-          userName: userName,
-          userId: schedule.userId,
-          capacity: schedule.capacity || 0,
-          reservations: schedule.reservations?.length || 0,
-        });
       }
-
+      
       // Ordenar por hora
       data.sort((a, b) => {
         const timeA = parseInt(a.time.split(':')[0]);

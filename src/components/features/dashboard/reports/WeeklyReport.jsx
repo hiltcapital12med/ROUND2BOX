@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../../services/firebase';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { startOfWeek, endOfWeek, eachDayOfInterval, startOfDay, endOfDay, format } from 'date-fns';
@@ -24,27 +24,29 @@ export default function WeeklyReport() {
       const chartData = [];
 
       for (const day of days) {
-        const dayStart = startOfDay(day);
-        const dayEnd = endOfDay(day);
-
-        const scheduleRef = collection(db, 'schedule');
-        const q = query(
-          scheduleRef,
-          where('date', '>=', dayStart),
-          where('date', '<=', dayEnd)
-        );
-
-        const snapshot = await getDocs(q);
-        const totalReservations = snapshot.docs.reduce(
-          (sum, doc) => sum + (doc.data().reservations?.length || 0),
-          0
-        );
+        const dayKey = format(day, 'yyyy-MM-dd');
+        
+        const scheduleRef = doc(db, 'schedule', dayKey);
+        const scheduleSnap = await getDoc(scheduleRef);
+        
+        let totalReservations = 0;
+        let totalClasses = 0;
+        
+        if (scheduleSnap.exists()) {
+          const scheduleData = scheduleSnap.data();
+          for (const [time, reservations] of Object.entries(scheduleData)) {
+            if (Array.isArray(reservations)) {
+              totalReservations += reservations.length;
+              totalClasses++;
+            }
+          }
+        }
 
         chartData.push({
           day: format(day, 'EEE', { locale: es }).substring(0, 3),
           fullDate: format(day, 'd/M'),
           reservations: totalReservations,
-          classes: snapshot.docs.length,
+          classes: totalClasses,
         });
       }
 
