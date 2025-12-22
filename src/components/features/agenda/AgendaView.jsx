@@ -55,6 +55,23 @@ export default function AgendaView() {
       const snap = await getDoc(scheduleRef);
       const currentData = snap.exists() ? snap.data() : {};
       
+      // 🔴 VALIDACIÓN: Verificar si el usuario ya tiene una clase ese día
+      let userAlreadyHasClassToday = false;
+      for (const [time, attendees] of Object.entries(currentData)) {
+        if (attendees && Array.isArray(attendees)) {
+          const isUserBooked = attendees.some(a => a.uid === user.uid);
+          if (isUserBooked) {
+            userAlreadyHasClassToday = true;
+            break;
+          }
+        }
+      }
+      
+      if (userAlreadyHasClassToday) {
+        alert("⚠️ Solo puedes agendar 1 clase por día. Ya tienes una clase reservada para hoy.");
+        return;
+      }
+      
       // Obtener lista actual de reservas para ese horario
       const currentList = currentData[slotTime] || [];
       
@@ -66,7 +83,7 @@ export default function AgendaView() {
         status: 'booked'
       };
       
-      // Verificar que el usuario no esté ya inscrito
+      // Verificar que el usuario no esté ya inscrito en esta clase específica
       const alreadyBooked = currentList.some(b => b.uid === user.uid);
       if (alreadyBooked) {
         alert("Ya estás inscrito en esta clase.");
@@ -203,6 +220,18 @@ export default function AgendaView() {
                 const isBooked = attendees.some(a => a.uid === user.uid);
                 const isFull = attendees.length >= CLASS_CAPACITY;
                 
+                // 🔴 Verificar si el usuario ya tiene otra clase ese día
+                let userHasAnotherClassToday = false;
+                for (const [time, slotAttendees] of Object.entries(bookings)) {
+                  if (time !== slot.time && slotAttendees && Array.isArray(slotAttendees)) {
+                    const isUserInOtherClass = slotAttendees.some(a => a.uid === user.uid);
+                    if (isUserInOtherClass) {
+                      userHasAnotherClassToday = true;
+                      break;
+                    }
+                  }
+                }
+                
                 return (
                     <div key={slot.id} className={`relative rounded-2xl border p-5 transition-all ${
                         isBooked 
@@ -263,6 +292,11 @@ export default function AgendaView() {
                                 ) : isFull ? (
                                     <button disabled className="w-full py-3 rounded-xl bg-gray-600 text-gray-400 font-bold text-sm cursor-not-allowed">
                                         Clase Llena
+                                    </button>
+                                ) : userHasAnotherClassToday ? (
+                                    <button disabled className="w-full py-3 rounded-xl bg-orange-600/50 text-orange-300 font-bold text-sm cursor-not-allowed flex items-center justify-center gap-2">
+                                        <Warning size={16} />
+                                        Ya tienes una clase hoy
                                     </button>
                                 ) : (
                                     <button 
