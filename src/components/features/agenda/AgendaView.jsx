@@ -5,6 +5,7 @@ import { getDailySlots, CLASS_CAPACITY, isColombianHoliday, COLOMBIAN_HOLIDAYS }
 import { db } from '../../../services/firebase';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { recordAttendance } from '../../../services/attendanceService';
+import { useTrainerForClass } from '../../../hooks/useTrainerForClass';
 import { Calendar, Clock, CheckCircle, XCircle, Users, Warning } from '@phosphor-icons/react';
 
 export default function AgendaView() {
@@ -220,6 +221,9 @@ export default function AgendaView() {
                 const isBooked = attendees.some(a => a.uid === user.uid);
                 const isFull = attendees.length >= CLASS_CAPACITY;
                 
+                // Obtener entrenador de la clase
+                const { trainer, loading: trainerLoading } = useTrainerForClass(selectedDate, slot.id);
+                
                 // 🔴 Verificar si el usuario ya tiene otra clase ese día
                 let userHasAnotherClassToday = false;
                 for (const [time, slotAttendees] of Object.entries(bookings)) {
@@ -277,6 +281,18 @@ export default function AgendaView() {
                                     ></div>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* ENTRENADOR ASIGNADO */}
+                        <div className="mb-4 p-3 bg-brand-gold/10 border border-brand-gold/30 rounded-lg">
+                            <p className="text-xs text-brand-gold/80 uppercase font-bold mb-1">👨‍🏫 Entrenador</p>
+                            {trainerLoading ? (
+                                <p className="text-sm text-gray-400">Cargando...</p>
+                            ) : trainer ? (
+                                <p className="text-sm font-bold text-white">{trainer.name}</p>
+                            ) : (
+                                <p className="text-sm text-gray-500">Por asignar</p>
+                            )}
                         </div>
 
                         {/* ZONA DE ACCIÓN: ATLETA */}

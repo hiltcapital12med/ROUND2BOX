@@ -6,6 +6,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { useUserStats } from '../../../hooks/useUserStats';
 import { useWeeklyStats } from '../../../hooks/useWeeklyStats';
 import { useMonthlyStats } from '../../../hooks/useMonthlyStats';
+import { useTrainerForClass } from '../../../hooks/useTrainerForClass';
 import { CalendarCheck, Target, User } from '@phosphor-icons/react';
 import ProgressRing from './ProgressRing';
 
@@ -14,6 +15,10 @@ export default function AthleteHomeDashboard() {
   const { weight, bmi, loading: weighLoading } = useUserStats();
   const { weeklyConsistency, loading: weeklyLoading } = useWeeklyStats();
   const { monthlyAttendances, loading: monthlyLoading } = useMonthlyStats();
+  
+  // Obtener entrenador de la próxima clase (hoy a las 18:00)
+  const today = new Date();
+  const { trainer, loading: trainerLoading } = useTrainerForClass(today, '18:00');
 
   return (
     <div className="flex flex-col h-full">
@@ -48,7 +53,9 @@ export default function AthleteHomeDashboard() {
             <div>
               <span className="inline-block bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded mb-2 uppercase">HOY • 18:00</span>
               <h3 className="text-2xl font-bold text-white">Boxeo Funcional</h3>
-              <p className="text-white/60 text-sm">Coach Mike</p>
+              <p className="text-white/60 text-sm">
+                {trainerLoading ? 'Cargando...' : (trainer ? trainer.name : 'Por asignar')}
+              </p>
             </div>
             {/* Botón de Acción Dinámico */}
             <button className="bg-brand-red text-white p-4 rounded-full shadow-lg shadow-brand-red/20 hover:scale-105 transition-transform flex-shrink-0">
