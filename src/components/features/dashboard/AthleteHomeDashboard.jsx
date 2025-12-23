@@ -6,11 +6,10 @@ import { useAuth } from '../../../context/AuthContext';
 import { useUserStats } from '../../../hooks/useUserStats';
 import { useWeeklyStats } from '../../../hooks/useWeeklyStats';
 import { useMonthlyStats } from '../../../hooks/useMonthlyStats';
-import { useTrainerForClass } from '../../../hooks/useTrainerForClass';
+import { useNextClassForAthlete } from '../../../hooks/useNextClassForAthlete';
 import { CalendarCheck, Target, User } from '@phosphor-icons/react';
 import ProgressRing from './ProgressRing';
 import AttendanceHistory from './AttendanceHistory';
-import MotivationalMessage from './MotivationalMessage';
 
 export default function AthleteHomeDashboard() {
   const { user } = useAuth();
@@ -18,9 +17,8 @@ export default function AthleteHomeDashboard() {
   const { weeklyConsistency, loading: weeklyLoading } = useWeeklyStats();
   const { monthlyAttendances, loading: monthlyLoading } = useMonthlyStats();
   
-  // Obtener entrenador de la próxima clase (hoy a las 18:00)
-  const today = new Date();
-  const { trainer, loading: trainerLoading } = useTrainerForClass(today, '18:00');
+  // Obtener la próxima clase inscrita del atleta
+  const { nextClass, trainer, loading: classLoading } = useNextClassForAthlete(user.uid);
 
   return (
     <div className="flex flex-col h-full">
@@ -51,16 +49,27 @@ export default function AthleteHomeDashboard() {
           {/* Efecto de brillo al pasar el mouse */}
           <div className="absolute inset-0 bg-gradient-to-r from-brand-red/0 via-brand-red/10 to-brand-red/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
 
-          <div className="relative z-10 flex justify-between items-center">
-            <div>
-              <span className="inline-block bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded mb-2 uppercase">HOY • 18:00</span>
-              <h3 className="text-2xl font-bold text-white">Boxeo Funcional</h3>
-              <p className="text-white/60 text-sm">
-                {trainerLoading ? 'Cargando...' : (trainer ? trainer.name : 'Por asignar')}
-              </p>
-            </div>
-            {/* Botón Motivacional */}
-            <MotivationalMessage />
+          <div className="relative z-10">
+            {classLoading ? (
+              <div className="text-white/60">Cargando clase...</div>
+            ) : nextClass ? (
+              <>
+                <div className="flex items-baseline gap-2 mb-3">
+                  <span className="inline-block bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">HOY</span>
+                  <span className="text-3xl font-black text-brand-gold">{nextClass.time}h</span>
+                </div>
+                <div>
+                  <p className="text-white/60 text-sm mb-2">Entrenador</p>
+                  <p className="text-2xl font-bold text-white">
+                    {trainer?.name || 'Por asignar'}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-white/60">No tienes clase reservada para hoy</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
