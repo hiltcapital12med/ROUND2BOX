@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../../services/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { CheckCircle } from '@phosphor-icons/react';
 
 const CONGRATULATIONS_MESSAGES = [
   {
@@ -59,21 +58,17 @@ export default function AttendanceConfirmation({ userId, nextClass }) {
 
   return (
     <div className="mb-8 animate-fade-in-up">
-      <div className="relative bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/50 rounded-2xl p-6 overflow-hidden">
-        {/* Efecto de brillo */}
-        <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-500/10 to-green-500/0 translate-x-[-100%] animate-pulse"></div>
+      <div className="relative bg-gradient-to-br from-green-500/15 to-emerald-500/15 border border-green-500/40 rounded-2xl p-6 overflow-hidden">
+        {/* Efecto de brillo sutil */}
+        <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-500/5 to-green-500/0 translate-x-[-100%] animate-pulse"></div>
 
-        <div className="relative z-10 flex items-start gap-4">
-          <CheckCircle size={32} className="text-green-400 flex-shrink-0 mt-1" weight="fill" />
-          
-          <div>
-            <h2 className="text-xl font-bold text-green-300 mb-1">
-              {message.title}
-            </h2>
-            <p className="text-green-300/80 text-sm">
-              {message.message}
-            </p>
-          </div>
+        <div className="relative z-10">
+          <h2 className="text-lg font-bold text-green-300 mb-2">
+            {message.title}
+          </h2>
+          <p className="text-green-300/75 text-sm">
+            {message.message}
+          </p>
         </div>
       </div>
     </div>
