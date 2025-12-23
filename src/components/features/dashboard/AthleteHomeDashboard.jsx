@@ -11,6 +11,7 @@ import { CalendarCheck, Target, User } from '@phosphor-icons/react';
 import ProgressRing from './ProgressRing';
 import AttendanceHistory from './AttendanceHistory';
 import MotivationalMessage from './MotivationalMessage';
+import AttendanceConfirmation from './AttendanceConfirmation';
 
 export default function AthleteHomeDashboard() {
   const { user } = useAuth();
@@ -49,23 +50,26 @@ export default function AthleteHomeDashboard() {
         {classLoading ? (
           <div className="text-white/60 text-center py-8">Cargando información...</div>
         ) : nextClass ? (
-          <div className="group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-brand-gold/30 rounded-2xl p-6 overflow-hidden transition-all hover:border-brand-red/50">
-            {/* Efecto de brillo al pasar el mouse */}
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-red/0 via-brand-red/10 to-brand-red/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+          <>
+            <AttendanceConfirmation userId={user.uid} nextClass={nextClass} />
+            <div className="group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-brand-gold/30 rounded-2xl p-6 overflow-hidden transition-all hover:border-brand-red/50">
+              {/* Efecto de brillo al pasar el mouse */}
+              <div className="absolute inset-0 bg-gradient-to-r from-brand-red/0 via-brand-red/10 to-brand-red/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
 
-            <div className="relative z-10">
-              <div className="flex items-baseline gap-2 mb-3">
-                <span className="inline-block bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">HOY</span>
-                <span className="text-3xl font-black text-brand-gold">{nextClass.time}h</span>
-              </div>
-              <div>
-                <p className="text-white/60 text-sm mb-2">Entrenador</p>
-                <p className="text-2xl font-bold text-white">
-                  {trainer?.name || 'Por asignar'}
-                </p>
+              <div className="relative z-10">
+                <div className="flex items-baseline gap-2 mb-3">
+                  <span className="inline-block bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">HOY</span>
+                  <span className="text-3xl font-black text-brand-gold">{nextClass.time}h</span>
+                </div>
+                <div>
+                  <p className="text-white/60 text-sm mb-2">Entrenador</p>
+                  <p className="text-2xl font-bold text-white">
+                    {trainer?.name || 'Por asignar'}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          </>
         ) : (
           <div className="text-center py-8">
             <MotivationalMessage />
