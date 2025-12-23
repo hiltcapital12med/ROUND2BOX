@@ -10,6 +10,7 @@ import { useTrainerForClass } from '../../../hooks/useTrainerForClass';
 import { CalendarCheck, Target, User } from '@phosphor-icons/react';
 import ProgressRing from './ProgressRing';
 import AttendanceHistory from './AttendanceHistory';
+import MotivationalMessage from './MotivationalMessage';
 
 export default function AthleteHomeDashboard() {
   const { user } = useAuth();
@@ -58,12 +59,8 @@ export default function AthleteHomeDashboard() {
                 {trainerLoading ? 'Cargando...' : (trainer ? trainer.name : 'Por asignar')}
               </p>
             </div>
-            {/* Botón de Acción Dinámico */}
-            <button className="bg-brand-red text-white p-4 rounded-full shadow-lg shadow-brand-red/20 hover:scale-105 transition-transform flex-shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
-              </svg>
-            </button>
+            {/* Botón Motivacional */}
+            <MotivationalMessage />
           </div>
         </div>
       </div>
