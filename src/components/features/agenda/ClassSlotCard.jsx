@@ -2,8 +2,6 @@ import React from 'react';
 import { CheckCircle, Clock, Users, Warning } from '@phosphor-icons/react';
 import { useTrainerForClass } from '../../../hooks/useTrainerForClass';
 
-const CLASS_CAPACITY = 8;
-
 export default function ClassSlotCard({ 
   slot, 
   attendees, 
@@ -13,7 +11,8 @@ export default function ClassSlotCard({
   role, 
   onCancel, 
   onBook, 
-  onToggleAttendance 
+  onToggleAttendance,
+  capacity = 4
 }) {
   // Hook seguro dentro del componente (no en un loop)
   const { trainer, loading: trainerLoading } = useTrainerForClass(selectedDate, slot.id);
@@ -29,11 +28,11 @@ export default function ClassSlotCard({
       {isFull && (
         <div className="mb-4 p-3 bg-red-500/10 border border-red-500 rounded-lg flex items-center gap-2 animate-pulse">
           <Warning size={16} className="text-red-500 flex-shrink-0" />
-          <span className="text-xs text-red-400 font-bold">¡Clase llena! Máximo {CLASS_CAPACITY} participantes</span>
+          <span className="text-xs text-red-400 font-bold">¡Clase llena! Máximo {capacity} participantes</span>
         </div>
       )}
 
-      {!isFull && attendees.length >= CLASS_CAPACITY - 1 && (
+      {!isFull && attendees.length >= capacity - 1 && (
         <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500 rounded-lg flex items-center gap-2">
           <Warning size={16} className="text-yellow-500 flex-shrink-0" />
           <span className="text-xs text-yellow-400 font-bold">¡Última plaza disponible!</span>
@@ -54,12 +53,12 @@ export default function ClassSlotCard({
         <div className="text-right">
           <div className="flex items-center justify-end gap-1 text-xs font-bold text-gray-400 mb-1">
             <Users size={14} />
-            <span>{attendees.length}/{CLASS_CAPACITY}</span>
+            <span>{attendees.length}/{capacity}</span>
           </div>
           <div className="w-20 h-1.5 bg-gray-700 rounded-full overflow-hidden">
             <div 
               className={`h-full rounded-full ${isFull ? 'bg-brand-red' : 'bg-brand-gold'}`} 
-              style={{ width: `${(attendees.length / CLASS_CAPACITY) * 100}%` }}
+              style={{ width: `${(attendees.length / capacity) * 100}%` }}
             ></div>
           </div>
         </div>
@@ -105,7 +104,7 @@ export default function ClassSlotCard({
       {/* ZONA DE ACCIÓN: ENTRENADOR (ADMIN) */}
       {(role === 'trainer' || role === 'admin') && (
         <div className="mt-4 pt-4 border-t border-white/10">
-          <h4 className="text-xs text-brand-gold uppercase font-bold mb-3">Lista de Asistencia ({attendees.length}/{CLASS_CAPACITY})</h4>
+          <h4 className="text-xs text-brand-gold uppercase font-bold mb-3">Lista de Asistencia ({attendees.length}/{capacity})</h4>
           {attendees.length === 0 ? (
             <p className="text-gray-500 text-xs italic">Nadie inscrito aún.</p>
           ) : (

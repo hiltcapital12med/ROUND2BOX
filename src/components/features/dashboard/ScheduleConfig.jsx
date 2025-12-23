@@ -13,11 +13,12 @@ export default function ScheduleConfig({ onClose }) {
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [classCapacity, setClassCapacity] = useState(4);
 
   useEffect(() => {
     loadConfig();
     loadTrainers();
-  }, []);
+  }, [selectedDate]);
 
   const loadTrainers = async () => {
     try {
@@ -37,23 +38,23 @@ export default function ScheduleConfig({ onClose }) {
 
   const loadConfig = async () => {
     try {
-      const configRef = doc(db, 'system', 'config');
+      const dateKey = getDateKey(selectedDate);
+      const configRef = doc(db, 'system', `schedule_${dateKey}`);
       const configSnap = await getDoc(configRef);
       
       let loadedConfig = {};
       
       if (configSnap.exists()) {
-        const allSchedules = configSnap.data();
-        // Parsear el config para obtener la estructura correcta
-        for (const [key, value] of Object.entries(allSchedules)) {
-          if (key.startsWith('schedule_')) {
-            const dateKey = key.replace('schedule_', '');
-            loadedConfig[dateKey] = value;
-          }
-        }
+        loadedConfig = configSnap.data();
+        setClassCapacity(loadedConfig.capacity || 4);
+      } else {
+        setClassCapacity(4);
       }
       
-      setConfig(loadedConfig);
+      setConfig(prev => ({
+        ...prev,
+        [dateKey]: loadedConfig
+      }));
     } catch (error) {
       console.error('Error cargando configuración:', error);
     } finally {
@@ -65,7 +66,7 @@ export default function ScheduleConfig({ onClose }) {
   
   const getDayConfig = (date) => {
     const key = getDateKey(date);
-    return config[key] || { enabled: {}, capacity: 4 };
+    return config[key] || { enabled: {}, capacity: 4, trainers: {} };
   };
 
   const handleToggleClass = (scheduleId) => {
@@ -85,17 +86,19 @@ export default function ScheduleConfig({ onClose }) {
     setSaved(false);
   };
 
-  const handleCapacityChange = (capacity) => {
+  const handleCapacityChange = (value) => {
     const dateKey = getDateKey(selectedDate);
     const dayConfig = getDayConfig(selectedDate);
+    const capacity = Math.max(1, Math.min(20, parseInt(value) || 4));
     
     setConfig(prev => ({
       ...prev,
       [dateKey]: {
         ...dayConfig,
-        capacity: parseInt(capacity)
+        capacity
       }
     }));
+    setClassCapacity(capacity);
     setSaved(false);
   };
 

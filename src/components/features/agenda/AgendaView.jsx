@@ -14,6 +14,7 @@ export default function AgendaView() {
   const [slots, setSlots] = useState([]);
   const [bookings, setBookings] = useState({});
   const [loading, setLoading] = useState(true);
+  const [classCapacity, setClassCapacity] = useState(4);
 
   const generateDays = () => {
     const days = [];
@@ -36,6 +37,18 @@ export default function AgendaView() {
     setSlots(dailySlots);
 
     const dateKey = selectedDate.toISOString().split('T')[0];
+    
+    // Cargar configuración del sistema (incluyendo capacidad)
+    try {
+      const configRef = doc(db, 'system', `schedule_${dateKey}`);
+      const configSnap = await getDoc(configRef);
+      if (configSnap.exists()) {
+        setClassCapacity(configSnap.data().capacity || 4);
+      }
+    } catch (error) {
+      console.log('No hay configuración personalizada, usando capacidad por defecto');
+    }
+
     const scheduleRef = doc(db, "schedule", dateKey);
     const snap = await getDoc(scheduleRef);
 
@@ -92,7 +105,7 @@ export default function AgendaView() {
       }
       
       // Verificar capacidad
-      if (currentList.length >= CLASS_CAPACITY) {
+      if (currentList.length >= classCapacity) {
         alert("La clase está llena.");
         return;
       }
@@ -220,7 +233,7 @@ export default function AgendaView() {
                 {slots.map((slot) => {
                     const attendees = bookings[slot.time] || [];
                     const isBooked = attendees.some(a => a.uid === user.uid);
-                    const isFull = attendees.length >= CLASS_CAPACITY;
+                    const isFull = attendees.length >= classCapacity;
                     
                     return (
                         <ClassSlotCard
@@ -234,6 +247,7 @@ export default function AgendaView() {
                             onCancel={handleCancel}
                             onBook={handleBooking}
                             onToggleAttendance={toggleAttendance}
+                            capacity={classCapacity}
                         />
                     );
                 })}
