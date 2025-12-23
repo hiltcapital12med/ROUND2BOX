@@ -31,12 +31,25 @@ export default function DailyReport() {
           if (Array.isArray(reservations) && reservations.length > 0) {
             // Por cada persona reservada
             for (const reservation of reservations) {
+              // Buscar si el usuario asistió
+              let attended = false;
+              try {
+                const attendanceRef = doc(db, 'users', reservation.uid, 'attendance', dateKey);
+                const attendanceSnap = await getDoc(attendanceRef);
+                if (attendanceSnap.exists()) {
+                  attended = attendanceSnap.data().attended === true;
+                }
+              } catch (error) {
+                console.log('No attendance record found for user:', reservation.uid);
+              }
+              
               data.push({
                 time: time,
                 userName: reservation.name || 'Usuario Desconocido',
                 userId: reservation.uid,
                 capacity: 4, // Capacidad estándar
-                status: reservation.status || 'booked'
+                status: reservation.status || 'booked',
+                attended: attended
               });
             }
           }
@@ -95,11 +108,24 @@ export default function DailyReport() {
                 {items.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex justify-between items-center bg-black/40 p-3 rounded-lg border-l-2 border-brand-neon"
+                    className={`flex justify-between items-center p-3 rounded-lg border-l-4 ${
+                      item.attended
+                        ? 'bg-green-500/10 border-green-500'
+                        : 'bg-orange-500/10 border-orange-500'
+                    }`}
                   >
-                    <p className="text-white font-semibold">{item.userName}</p>
-                    <span className="text-xs bg-brand-neon text-black px-3 py-1 rounded-full font-bold">
-                      Inscrito
+                    <div>
+                      <p className="text-white font-semibold">{item.userName}</p>
+                      <p className="text-xs text-white/60 mt-1">
+                        Clase: {item.time}h
+                      </p>
+                    </div>
+                    <span className={`text-xs px-3 py-1 rounded-full font-bold ${
+                      item.attended
+                        ? 'bg-green-500 text-white'
+                        : 'bg-orange-500 text-white'
+                    }`}>
+                      {item.attended ? '✓ Asistió' : 'Inscrito'}
                     </span>
                   </div>
                 ))}

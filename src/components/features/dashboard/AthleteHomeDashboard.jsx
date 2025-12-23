@@ -9,6 +9,7 @@ import { useMonthlyStats } from '../../../hooks/useMonthlyStats';
 import { useTrainerForClass } from '../../../hooks/useTrainerForClass';
 import { CalendarCheck, Target, User } from '@phosphor-icons/react';
 import ProgressRing from './ProgressRing';
+import AttendanceHistory from './AttendanceHistory';
 
 export default function AthleteHomeDashboard() {
   const { user } = useAuth();
@@ -130,6 +131,11 @@ export default function AthleteHomeDashboard() {
             <span className="block text-xs text-white/40 mt-1">IMC: {bmi}</span>
           )}
         </div>
+      </div>
+
+      {/* 5. HISTORIAL DE ASISTENCIA */}
+      <div className="mt-8 pt-8 border-t border-white/10 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+        <AttendanceHistory />
       </div>
     </div>
   );
