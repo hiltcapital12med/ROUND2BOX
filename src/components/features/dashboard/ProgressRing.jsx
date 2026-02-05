@@ -138,7 +138,8 @@ export default function ProgressRing() {
   };
 
   // Calcular offset para la rueda (0-100%)
-  const circumference = 283.27; // 2 * Math.PI * 45
+  // Radio de 40 en SVG viewBox de 100x100
+  const circumference = 2 * Math.PI * 40; // 251.33
   const strokeDashoffset = circumference * (1 - weeklyData.consistency / 100);
 
   // Determinar color basado en nivel
@@ -166,80 +167,115 @@ export default function ProgressRing() {
   }
 
   return (
-    <div className="relative w-56 h-56 flex items-center justify-center">
-      {/* SVG del Anillo de Progreso */}
-      <svg className="w-full h-full rotate-[-90deg]" viewBox="0 0 100 100">
-        {/* Círculo base (gris oscuro) */}
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          fill="none"
-          stroke="#171717"
-          strokeWidth="8"
-        />
-        {/* Círculo de progreso (Gradiente Dorado/Rojo) */}
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          fill="none"
-          stroke="url(#progressGradient)"
-          strokeWidth="8"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          className="transition-all duration-1000 ease-out"
-          strokeLinecap="round"
-        />
-        {/* Definición del Gradiente */}
-        <defs>
-          <linearGradient
-            id="progressGradient"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="0%"
-          >
-            <stop offset="0%" stopColor="#E30613" />
-            <stop offset="100%" stopColor="#CBA135" />
-          </linearGradient>
-        </defs>
-      </svg>
-
-      {/* CONTENIDO CENTRAL DEL NÚCLEO */}
-      <div className="absolute text-center z-10">
-        <span className="block text-brand-secondary text-xs font-bold uppercase tracking-widest mb-1">
-          Esta Semana
-        </span>
-        <span className={`block text-5xl font-black leading-none ${getColorClass()}`}>
-          {weeklyData.level}
-        </span>
+    <div className="w-full flex flex-col items-center gap-8">
+      {/* TARJETA CONTENEDORA */}
+      <div className="w-full bg-white rounded-3xl border border-gray-200 p-8 shadow-sm">
         
-        {/* Porcentaje en la mitad */}
-        <div className="mt-3 flex flex-col items-center gap-1">
-          <span className="block text-2xl font-bold text-gray-800">
-            {weeklyData.consistency}%
+        {/* ENCABEZADO */}
+        <div className="text-center mb-6">
+          <span className="inline-block text-brand-secondary text-xs font-bold uppercase tracking-widest px-3 py-1 bg-brand-secondary/10 rounded-full mb-2">
+            Esta Semana
           </span>
-          <span className="block text-xs text-gray-400">
-            {weeklyData.attendances}/{weeklyData.possibleClasses} clases
-          </span>
+          <h3 className="text-gray-800 text-lg font-bold">Tu Progreso</h3>
         </div>
 
-        {/* Racha */}
-        {weeklyData.streak > 0 && (
-          <div className="mt-2 inline-block bg-brand-accent/20 border border-brand-accent rounded-full px-2 py-1">
-            <span className="text-xs text-brand-accent font-bold">
-              🔥 {weeklyData.streak} días consecutivos
-            </span>
+        {/* CONTENEDOR DEL ANILLO CON FLEX LAYOUT */}
+        <div className="flex items-center justify-center gap-8">
+          
+          {/* SVG del Anillo de Progreso */}
+          <div className="flex-shrink-0">
+            <svg className="w-48 h-48 rotate-[-90deg]" viewBox="0 0 100 100">
+              {/* Círculo base (gris claro) */}
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="none"
+                stroke="#e5e7eb"
+                strokeWidth="6"
+              />
+              {/* Círculo de progreso (Gradiente nuevo) */}
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="none"
+                stroke="url(#progressGradient)"
+                strokeWidth="6"
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                className="transition-all duration-1000 ease-out"
+                strokeLinecap="round"
+              />
+              {/* Definición del Gradiente - Nueva Paleta */}
+              <defs>
+                <linearGradient
+                  id="progressGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                >
+                  <stop offset="0%" stopColor="#d8315b" />
+                  <stop offset="50%" stopColor="#e85a7f" />
+                  <stop offset="100%" stopColor="#3e92cc" />
+                </linearGradient>
+              </defs>
+            </svg>
           </div>
-        )}
-      </div>
 
-      {/* Mensaje motivador debajo */}
-      <div className="absolute -bottom-16 text-center">
-        <span className="text-sm text-gray-800/80 font-medium">
-          {weeklyData.message}
-        </span>
+          {/* CONTENIDO INFORMATIVO */}
+          <div className="flex-1 space-y-4">
+            
+            {/* Nivel y Porcentaje */}
+            <div>
+              <span className={`block text-4xl font-black mb-2 ${getColorClass()}`}>
+                {weeklyData.level}
+              </span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-bold text-gray-800">
+                  {weeklyData.consistency}%
+                </span>
+                <span className="text-sm text-gray-600">
+                  de asistencia
+                </span>
+              </div>
+            </div>
+
+            {/* Detalle de clases */}
+            <div className="bg-brand-accent/5 border border-brand-accent/20 rounded-xl p-3">
+              <span className="text-xs text-gray-600 uppercase tracking-wide font-semibold block mb-1">
+                Asistencias
+              </span>
+              <span className="text-2xl font-bold text-gray-800">
+                {weeklyData.attendances}
+                <span className="text-sm font-normal text-gray-500 ml-1">
+                  / {weeklyData.possibleClasses} clases
+                </span>
+              </span>
+            </div>
+
+            {/* Racha - Si existe */}
+            {weeklyData.streak > 0 && (
+              <div className="bg-brand-secondary/10 border border-brand-secondary/40 rounded-xl p-3">
+                <span className="text-xs text-brand-secondary uppercase tracking-wide font-semibold block mb-1">
+                  Racha Actual
+                </span>
+                <span className="text-2xl font-bold text-brand-secondary">
+                  🔥 {weeklyData.streak} días
+                </span>
+              </div>
+            )}
+
+            {/* Mensaje Motivador */}
+            <div className="pt-2 border-t border-gray-200">
+              <span className="text-sm text-gray-700 font-medium italic">
+                "{weeklyData.message}"
+              </span>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
   );
