@@ -18,7 +18,7 @@ export default function RoleSelector({ onRoleSelect, loading }) {
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-brand-secondary opacity-5 rounded-full blur-3xl"></div>
 
       {/* TARJETA DE SELECCIÓN */}
-      <div className="relative z-10 w-full max-w-lg bg-brand-dark/80 backdrop-blur-lg border border-brand-secondary/20 p-8 rounded-3xl shadow-2xl shadow-black/50">
+      <div className="relative z-10 w-full max-w-lg bg-white border border-gray-200 p-8 rounded-3xl shadow-lg">
         
         {/* CABECERA */}
         <div className="text-center mb-12">
@@ -29,7 +29,7 @@ export default function RoleSelector({ onRoleSelect, loading }) {
           </div>
           
           <h1 className="text-gray-800 text-2xl font-bold tracking-tight mb-2">¿Vienes a entrenar?</h1>
-          <p className="text-gray-400 text-sm">Cuéntanos tu rol para personalizamos tu experiencia</p>
+          <p className="text-gray-600 text-sm">Cuéntanos tu rol para personalizamos tu experiencia</p>
         </div>
 
         {/* OPCIONES DE ROL */}

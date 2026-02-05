@@ -1,5 +1,5 @@
-﻿// UBICACIÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œN: /src/components/features/dashboard/TrainerDashboard.jsx
-// Dashboard de inicio para entrenadores - EstÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©tica unificada con Landing Page
+﻿// UBICACIÓN: /src/components/features/dashboard/TrainerDashboard.jsx
+// Dashboard de inicio para entrenadores - Estética unificada con paleta de colores actualizada
 
 import React from 'react';
 import { useAuth } from '../../../context/AuthContext';
@@ -12,7 +12,7 @@ export default function TrainerDashboard({ onNavigate }) {
   if (!user) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-gray-800">Por favor inicia sesiÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n</p>
+        <p className="text-gray-800">Por favor inicia sesión</p>
       </div>
     );
   }
@@ -32,13 +32,13 @@ export default function TrainerDashboard({ onNavigate }) {
         />
 
         <div className="space-y-8">
-          {/* SECCIÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œN 1: ESTADÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂSTICAS GENERALES */}
+          {/* SECCIÓN 1: ESTADÍSTICAS GENERALES */}
           <section>
             <div className="dashboard-card">
               <div className="dashboard-card-header">
                 <h2 className="dashboard-card-title">
                   <span className="dashboard-card-title-accent"></span>
-                  EstadÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­sticas Generales
+                  Estadísticas Generales
                 </h2>
                 <span className="dashboard-card-label">Datos Actuales</span>
               </div>
@@ -46,7 +46,7 @@ export default function TrainerDashboard({ onNavigate }) {
                 {/* Atletas Activos */}
                 <div className="dashboard-metric-item">
                   <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-                    <User size={32} className="text-[#E30613]" weight="duotone" />
+                    <User size={32} className="text-brand-accent" weight="duotone" />
                   </div>
                   <p className="dashboard-metric-value">8</p>
                   <p className="dashboard-metric-label">Atletas Activos</p>
@@ -56,7 +56,7 @@ export default function TrainerDashboard({ onNavigate }) {
                 {/* Clases Semana */}
                 <div className="dashboard-metric-item">
                   <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-                    <CalendarCheck size={32} className="text-[#E30613]" weight="duotone" />
+                    <CalendarCheck size={32} className="text-brand-secondary" weight="duotone" />
                   </div>
                   <p className="dashboard-metric-value">12</p>
                   <p className="dashboard-metric-label">Clases Semana</p>
@@ -66,7 +66,7 @@ export default function TrainerDashboard({ onNavigate }) {
                 {/* Asistencia Promedio */}
                 <div className="dashboard-metric-item">
                   <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-                    <Target size={32} className="text-[#E30613]" weight="duotone" />
+                    <Target size={32} className="text-brand-primary" weight="duotone" />
                   </div>
                   <p className="dashboard-metric-value">87%</p>
                   <p className="dashboard-metric-label">Asistencia</p>
@@ -76,22 +76,22 @@ export default function TrainerDashboard({ onNavigate }) {
             </div>
           </section>
 
-          {/* SECCIÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œN 2: ACCIONES RÃƒÆ’Ã†â€™Ãƒâ€šÃ‚ÂPIDAS */}
+          {/* SECCIÓN 2: ACCIONES RÁPIDAS */}
           <section>
             <div className="dashboard-card">
               <div className="dashboard-card-header">
                 <h2 className="dashboard-card-title">
                   <span className="dashboard-card-title-accent"></span>
-                  Acciones RÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡pidas
+                  Acciones Rápidas
                 </h2>
-                <span className="dashboard-card-label">Gestiona FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡cil</span>
+                <span className="dashboard-card-label">Gestiona Fácil</span>
               </div>
               
               <div className="space-y-3">
                 {/* Crear Nueva Clase - CTA Principal */}
                 <button style={{
                   width: '100%',
-                  background: 'linear-gradient(135deg, #E30613, #FF4444)',
+                  background: 'linear-gradient(135deg, #d8315b, #e85a7f)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '1rem',
@@ -100,125 +100,129 @@ export default function TrainerDashboard({ onNavigate }) {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   fontSize: '1rem',
-                  fontWeight: '800',
+                  fontWeight: 'bold',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  boxShadow: 'var(--dashboard-shadow-lg)'
-                }} 
-                onMouseEnter={(e) => e.target.style.boxShadow = 'var(--dashboard-shadow-xl)'}
-                onMouseLeave={(e) => e.target.style.boxShadow = 'var(--dashboard-shadow-lg)'}
-                className="hover:scale-105">
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontWeight: '900', marginBottom: '0.25rem' }}>Crear Nueva Clase</div>
-                    <div style={{ fontSize: '0.85rem', opacity: 0.9, fontWeight: '500' }}>Programar sesiÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n</div>
-                  </div>
-                  <Plus size={24} weight="bold" />
+                  boxShadow: '0 4px 15px rgba(216, 49, 91, 0.3)'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(216, 49, 91, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 4px 15px rgba(216, 49, 91, 0.3)';
+                }}>
+                  <span>Crear Nueva Clase</span>
+                  <Lightning size={20} weight="fill" />
                 </button>
 
-                {/* Ver Atletas */}
+                {/* Ver Atletas Activos */}
                 <button style={{
                   width: '100%',
-                  background: 'transparent',
-                  color: '#E30613',
-                  border: '2px solid #E30613',
+                  background: 'linear-gradient(135deg, rgba(62, 146, 204, 0.1), rgba(62, 146, 204, 0.05))',
+                  color: '#3e92cc',
+                  border: '2px solid rgba(62, 146, 204, 0.3)',
                   borderRadius: '1rem',
                   padding: '1.25rem 1.5rem',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   fontSize: '1rem',
-                  fontWeight: '800',
+                  fontWeight: 'bold',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
+                  transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(227, 6, 19, 0.08)';
-                  e.target.style.boxShadow = 'var(--dashboard-shadow-md)';
+                  e.target.style.borderColor = 'rgba(62, 146, 204, 0.6)';
+                  e.target.style.background = 'linear-gradient(135deg, rgba(62, 146, 204, 0.15), rgba(62, 146, 204, 0.08))';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'transparent';
-                  e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = 'rgba(62, 146, 204, 0.3)';
+                  e.target.style.background = 'linear-gradient(135deg, rgba(62, 146, 204, 0.1), rgba(62, 146, 204, 0.05))';
                 }}>
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontWeight: '900', marginBottom: '0.25rem', color: '#1A1A1A' }}>Mis Atletas</div>
-                    <div style={{ fontSize: '0.85rem', color: '#5A5A5A', fontWeight: '500' }}>Ver desempeÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±o</div>
-                  </div>
-                  <Lightning size={24} weight="fill" />
+                  <span>Ver Mis Atletas Activos</span>
+                  <User size={20} weight="duotone" />
                 </button>
 
-                {/* Enviar NotificaciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n */}
+                {/* Enviar Notificación a Atletas */}
                 <button style={{
                   width: '100%',
-                  background: 'transparent',
-                  color: '#1A1A1A',
-                  border: '2px solid #E8E8E8',
+                  background: 'linear-gradient(135deg, rgba(10, 36, 99, 0.1), rgba(10, 36, 99, 0.05))',
+                  color: '#0a2463',
+                  border: '2px solid rgba(10, 36, 99, 0.3)',
                   borderRadius: '1rem',
                   padding: '1.25rem 1.5rem',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   fontSize: '1rem',
-                  fontWeight: '800',
+                  fontWeight: 'bold',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
+                  transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.borderColor = '#E30613';
-                  e.target.style.background = 'rgba(227, 6, 19, 0.05)';
-                  e.target.style.boxShadow = 'var(--dashboard-shadow-sm)';
+                  e.target.style.borderColor = 'rgba(10, 36, 99, 0.6)';
+                  e.target.style.background = 'linear-gradient(135deg, rgba(10, 36, 99, 0.15), rgba(10, 36, 99, 0.08))';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.borderColor = '#E8E8E8';
-                  e.target.style.background = 'transparent';
-                  e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = 'rgba(10, 36, 99, 0.3)';
+                  e.target.style.background = 'linear-gradient(135deg, rgba(10, 36, 99, 0.1), rgba(10, 36, 99, 0.05))';
                 }}>
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontWeight: '900', marginBottom: '0.25rem' }}>Enviar NotificaciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n</div>
-                    <div style={{ fontSize: '0.85rem', color: '#5A5A5A', fontWeight: '500' }}>Alertar atletas</div>
-                  </div>
-                  <Bell size={24} weight="duotone" style={{ color: '#999999' }} />
+                  <span>Enviar Notificación</span>
+                  <Bell size={20} weight="duotone" />
                 </button>
 
-                {/* Ver Reportes */}
+                {/* Revisar Disponibilidad */}
                 <button style={{
                   width: '100%',
-                  background: 'transparent',
-                  color: '#1A1A1A',
-                  border: '2px solid #E8E8E8',
+                  background: 'linear-gradient(135deg, rgba(245, 245, 245, 0.5), rgba(245, 245, 245, 0.3))',
+                  color: '#666',
+                  border: '2px solid rgba(200, 200, 200, 0.3)',
                   borderRadius: '1rem',
                   padding: '1.25rem 1.5rem',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   fontSize: '1rem',
-                  fontWeight: '800',
+                  fontWeight: 'bold',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
+                  transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.borderColor = '#E30613';
-                  e.target.style.background = 'rgba(227, 6, 19, 0.05)';
-                  e.target.style.boxShadow = 'var(--dashboard-shadow-sm)';
+                  e.target.style.borderColor = 'rgba(200, 200, 200, 0.6)';
+                  e.target.style.background = 'linear-gradient(135deg, rgba(245, 245, 245, 0.7), rgba(245, 245, 245, 0.5))';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.borderColor = '#E8E8E8';
-                  e.target.style.background = 'transparent';
-                  e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = 'rgba(200, 200, 200, 0.3)';
+                  e.target.style.background = 'linear-gradient(135deg, rgba(245, 245, 245, 0.5), rgba(245, 245, 245, 0.3))';
                 }}>
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontWeight: '900', marginBottom: '0.25rem' }}>Ver Reportes</div>
-                    <div style={{ fontSize: '0.85rem', color: '#5A5A5A', fontWeight: '500' }}>AnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡lisis semanal</div>
-                  </div>
-                  <BookmarkSimple size={24} weight="duotone" style={{ color: '#999999' }} />
+                  <span>Mi Disponibilidad</span>
+                  <BookmarkSimple size={20} weight="duotone" />
                 </button>
+              </div>
+            </div>
+          </section>
+
+          {/* SECCIÓN 3: INFORMACIÓN RÁPIDA */}
+          <section>
+            <div className="dashboard-card">
+              <div className="dashboard-card-header">
+                <h2 className="dashboard-card-title">
+                  <span className="dashboard-card-title-accent"></span>
+                  Recordatorio Importante
+                </h2>
+              </div>
+              <div style={{
+                padding: '1.5rem',
+                borderRadius: '0.75rem',
+                background: 'linear-gradient(135deg, rgba(62, 146, 204, 0.1), rgba(10, 36, 99, 0.05))',
+                border: '1px solid rgba(62, 146, 204, 0.3)',
+                color: '#444'
+              }}>
+                <p style={{ fontSize: '0.9rem', lineHeight: '1.6', margin: 0 }}>
+                  ✓ Actualiza tu perfil con tu disponibilidad semanal para que los atletas puedan conocer tus horarios de atención.
+                </p>
               </div>
             </div>
           </section>

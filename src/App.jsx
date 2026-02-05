@@ -109,10 +109,10 @@ function LoginScreen() {
           <div className="animate-fade-in-up">
             <div className="bg-gray-50 border border-gray-200 p-6 rounded-3xl text-center shadow-lg">
               
-              <div className="w-20 h-20 mx-auto bg-brand-primary rounded-full border-2 border-brand-secondary flex items-center justify-center mb-6 shadow-lg shadow-brand-secondary/20">
-                {selectedRole === 'user' && <User size={40} className="text-gray-800" weight="fill" />}
-                {selectedRole === 'trainer' && <Megaphone size={40} className="text-gray-800" weight="fill" />}
-                {selectedRole === 'admin' && <ShieldCheck size={40} className="text-gray-800" weight="fill" />}
+              <div className="w-20 h-20 mx-auto bg-brand-accent rounded-full border-2 border-brand-accent flex items-center justify-center mb-6 shadow-lg shadow-brand-accent/20">
+                {selectedRole === 'user' && <User size={40} className="text-white" weight="fill" />}
+                {selectedRole === 'trainer' && <Megaphone size={40} className="text-white" weight="fill" />}
+                {selectedRole === 'admin' && <ShieldCheck size={40} className="text-white" weight="fill" />}
               </div>
 
               <button 
