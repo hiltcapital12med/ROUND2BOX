@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Heart } from '@phosphor-icons/react';
+import { Fist } from '@phosphor-icons/react';
 
 const MOTIVATIONAL_MESSAGES = [
   {
@@ -43,7 +43,7 @@ const MOTIVATIONAL_MESSAGES = [
     subtitle: "Reales, conectados, unidos"
   },
   {
-    text: "Disciplina con corazón. Eso es Round2Box.",
+    text: "Disciplina con pasión. Eso es Round2Box.",
     subtitle: "Te estamos esperando"
   },
   {
@@ -67,10 +67,10 @@ export default function MotivationalMessage() {
 
   return (
     <div className="flex-shrink-0 flex flex-col items-center">
-      {/* Icono */}
+      {/* Icono - Guante de Boxeo */}
       <div className="mb-4">
-        <div className="bg-red-500/20 border border-red-500/40 rounded-full p-3 flex items-center justify-center">
-          <Heart size={32} className="text-red-400 animate-pulse" weight="fill" />
+        <div className="bg-brand-accent/20 border border-brand-accent/40 rounded-full p-3 flex items-center justify-center">
+          <Fist size={32} className="text-brand-accent animate-pulse" weight="fill" />
         </div>
       </div>
 
