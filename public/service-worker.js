@@ -106,6 +106,11 @@ self.addEventListener('fetch', (evt) => {
   }
 
   // ESTRATEGIA B: Archivos estáticos -> Cache First
+  // IMPORTANTE: Filtrar requests que no sean http/https para evitar errores de chrome-extension
+  if (!evt.request.url.startsWith('http://') && !evt.request.url.startsWith('https://')) {
+    return;
+  }
+
   evt.respondWith(
     caches.match(evt.request).then((cached) => {
       if (cached) {
