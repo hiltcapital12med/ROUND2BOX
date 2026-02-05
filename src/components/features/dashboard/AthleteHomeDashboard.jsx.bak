@@ -1,0 +1,189 @@
+// UBICACIÓN: /src/components/features/dashboard/AthleteHomeDashboard.jsx
+// Dashboard de inicio para atletas - Estética unificada con Landing Page
+
+import React from 'react';
+import { useAuth } from '../../../context/AuthContext';
+import { useUserStats } from '../../../hooks/useUserStats';
+import { useWeeklyStats } from '../../../hooks/useWeeklyStats';
+import { useMonthlyStats } from '../../../hooks/useMonthlyStats';
+import { useNextClassForAthlete } from '../../../hooks/useNextClassForAthlete';
+import { CalendarCheck, Target, User, CheckCircle } from '@phosphor-icons/react';
+import ProgressRing from './ProgressRing';
+import AttendanceHistory from './AttendanceHistory';
+import MotivationalMessage from './MotivationalMessage';
+import AttendanceConfirmation from './AttendanceConfirmation';
+import DashboardHeader from '../../dashboard/DashboardHeader';
+
+export default function AthleteHomeDashboard({ onNavigate }) {
+  const { user } = useAuth();
+  const { weight, bmi, loading: weighLoading } = useUserStats();
+  const { weeklyConsistency, loading: weeklyLoading } = useWeeklyStats();
+  const { monthlyAttendances, loading: monthlyLoading } = useMonthlyStats();
+  const { nextClass, trainer, loading: classLoading } = useNextClassForAthlete(user?.uid || '');
+
+  if (!user) {
+    return <div className="flex items-center justify-center h-full">
+      <p className="text-white">Por favor inicia sesión</p>
+    </div>;
+  }
+
+  return (
+    <div className="dashboard-container" style={{ paddingBottom: '120px' }}>
+      <div className="dashboard-inner">
+        {/* HEADER CON SALUDO PERSONALIZADO */}
+        <DashboardHeader
+          title="Mi Progreso"
+          subtitle="Tu resumen de hoy"
+          stats={[
+            { value: monthlyLoading ? '--' : monthlyAttendances, label: 'Este mes' },
+            { value: weeklyLoading ? '--' : `${weeklyConsistency}%`, label: 'Consistencia' }
+          ]}
+          onNavigate={onNavigate}
+        />
+
+        <div className="space-y-8">
+          {/* SECCIÓN 1: MI PROGRESO - Gráfico Donut */}
+          <section>
+            <div className="dashboard-card">
+              <div className="dashboard-card-header">
+                <h2 className="dashboard-card-title">
+                  <span className="dashboard-card-title-accent"></span>
+                  Mi Progreso
+                </h2>
+                <span className="dashboard-card-label">Clases Cumplidas</span>
+              </div>
+              <div className="dashboard-progress-ring">
+                <ProgressRing />
+              </div>
+            </div>
+          </section>
+
+          {/* SECCIÓN 2: PRÓXIMA CLASE - Card Destacada */}
+          {!classLoading && nextClass && (
+            <section>
+              <div className="dashboard-next-class">
+                <div className="dashboard-next-class-content">
+                  <div className="dashboard-next-class-info">
+                    <div className="dashboard-next-class-time">
+                      <span className="dashboard-next-class-time-value">{nextClass.time}</span>
+                      <span className="dashboard-next-class-time-unit">hrs</span>
+                    </div>
+                    <div className="dashboard-next-class-trainer">
+                      <div className="dashboard-next-class-trainer-avatar">
+                        💪
+                      </div>
+                      <div className="dashboard-next-class-trainer-info">
+                        <p className="dashboard-next-class-trainer-label">Tu Entrenador</p>
+                        <p className="dashboard-next-class-trainer-name">{trainer?.name || 'Por asignar'}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="dashboard-next-class-actions">
+                    <AttendanceConfirmation userId={user.uid} nextClass={nextClass} />
+                    <button className="dashboard-btn-confirm">
+                      <CheckCircle size={20} weight="fill" />
+                      Confirmar Asistencia
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {classLoading && (
+            <section>
+              <div className="dashboard-next-class" style={{ minHeight: '200px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '1rem' }}>
+                  <div style={{ width: '24px', height: '24px', border: '3px solid #E30613', borderTop: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                  <span style={{ color: '#5A5A5A', fontWeight: '600' }}>Cargando próxima clase...</span>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {!classLoading && !nextClass && (
+            <section>
+              <div className="dashboard-next-class" style={{ minHeight: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <MotivationalMessage />
+              </div>
+            </section>
+          )}
+
+          {/* SECCIÓN 3: TUS MÉTRICAS - Grid de Widgets */}
+          <section>
+            <div className="dashboard-card">
+              <div className="dashboard-card-header">
+                <h2 className="dashboard-card-title">
+                  <span className="dashboard-card-title-accent"></span>
+                  Tus Métricas
+                </h2>
+                <span className="dashboard-card-label">Actualizadas Hoy</span>
+              </div>
+              <div className="dashboard-metrics-grid">
+                {/* Métrica 1: Asistencias Mensuales */}
+                <div className="dashboard-metric-item">
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                    <CalendarCheck size={32} className="text-[#E30613]" weight="duotone" />
+                  </div>
+                  <p className="dashboard-metric-value">{monthlyLoading ? '--' : monthlyAttendances}</p>
+                  <p className="dashboard-metric-label">Asistencias</p>
+                  <p style={{ fontSize: '0.75rem', color: '#5A5A5A', marginTop: '0.5rem' }}>Este mes</p>
+                </div>
+
+                {/* Métrica 2: Consistencia Semanal */}
+                <div className="dashboard-metric-item">
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                    <Target size={32} className="text-[#E30613]" weight="duotone" />
+                  </div>
+                  <p className="dashboard-metric-value">{weeklyLoading ? '--' : `${weeklyConsistency}%`}</p>
+                  <p className="dashboard-metric-label">Consistencia</p>
+                  <p style={{ fontSize: '0.75rem', color: '#5A5A5A', marginTop: '0.5rem' }}>Esta semana</p>
+                </div>
+
+                {/* Métrica 3: Peso Actual */}
+                <div className="dashboard-metric-item">
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                    <User size={32} className="text-[#E30613]" weight="duotone" />
+                  </div>
+                  {weighLoading ? (
+                    <p className="dashboard-metric-value">--</p>
+                  ) : weight ? (
+                    <>
+                      <p className="dashboard-metric-value">{weight}</p>
+                      <p className="dashboard-metric-label">Kg</p>
+                      {bmi && <p style={{ fontSize: '0.75rem', color: '#5A5A5A', marginTop: '0.5rem' }}>IMC: {bmi}</p>}
+                    </>
+                  ) : (
+                    <p style={{ fontSize: '0.9rem', color: '#999999', fontWeight: '600' }}>Sin datos</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* SECCIÓN 4: HISTORIAL DE ASISTENCIA */}
+          <section>
+            <div className="dashboard-card">
+              <div className="dashboard-card-header">
+                <h2 className="dashboard-card-title">
+                  <span className="dashboard-card-title-accent"></span>
+                  Historial
+                </h2>
+                <span className="dashboard-card-label">Últimas Semanas</span>
+              </div>
+              <div className="dashboard-history">
+                <AttendanceHistory />
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+}

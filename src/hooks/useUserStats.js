@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/hooks/useUserStats.js
+﻿// UBICACIÓN: /src/hooks/useUserStats.js
 // Hook personalizado para cargar estadísticas del usuario desde Firebase
 
 import { useState, useEffect } from 'react';

@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/utils/notificationsConfig.js
+﻿// UBICACIÓN: /src/utils/notificationsConfig.js
 
 // Mensajes de Motivación (Aleatorios)
 export const MOTIVATIONAL_MESSAGES = [

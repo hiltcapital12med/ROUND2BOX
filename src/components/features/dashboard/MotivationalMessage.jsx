@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Heart } from '@phosphor-icons/react';
 
 const MOTIVATIONAL_MESSAGES = [
@@ -76,10 +76,10 @@ export default function MotivationalMessage() {
 
       {/* Información del mensaje */}
       <div className="text-center">
-        <p className="text-sm text-white/70 italic leading-relaxed max-w-xs mx-auto">
+        <p className="text-sm text-gray-800/70 italic leading-relaxed max-w-xs mx-auto">
           "{message.text}"
         </p>
-        <p className="text-xs text-white/50 mt-2">
+        <p className="text-xs text-gray-800/50 mt-2">
           {message.subtitle}
         </p>
       </div>

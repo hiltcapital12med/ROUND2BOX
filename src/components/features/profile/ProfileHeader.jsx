@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/components/features/profile/ProfileHeader.jsx
+﻿// UBICACIÓN: /src/components/features/profile/ProfileHeader.jsx
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { updateProfile } from 'firebase/auth';
@@ -79,10 +79,10 @@ export default function ProfileHeader() {
           <img 
             src={user.photoURL} 
             alt="Avatar" 
-            className="w-20 h-20 rounded-full border-2 border-brand-gold p-1 object-cover shadow-lg shadow-black/50" 
+            className="w-20 h-20 rounded-full border-2 border-brand-secondary p-1 object-cover shadow-lg shadow-black/50" 
           />
           {/* Badge de usuario */}
-          <div className="absolute bottom-0 right-0 w-6 h-6 bg-brand-gold text-black flex items-center justify-center rounded-full text-xs font-bold border-2 border-black z-10">
+          <div className="absolute bottom-0 right-0 w-6 h-6 bg-brand-secondary text-black flex items-center justify-center rounded-full text-xs font-bold border-2 border-black z-10">
               <User weight="fill" />
           </div>
           
@@ -95,7 +95,7 @@ export default function ProfileHeader() {
             {uploadingPhoto ? (
               <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
             ) : (
-              <Camera size={24} className="text-white" weight="fill" />
+              <Camera size={24} className="text-gray-800" weight="fill" />
             )}
           </button>
 
@@ -119,13 +119,13 @@ export default function ProfileHeader() {
                   type="text" 
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="bg-brand-charcoal border-b-2 border-brand-gold text-white text-xl font-bold px-2 py-1 w-full focus:outline-none"
+                  className="bg-brand-dark border-b-2 border-brand-secondary text-gray-800 text-xl font-bold px-2 py-1 w-full focus:outline-none"
                   autoFocus
                 />
                 <button 
                   onClick={handleSave} 
                   disabled={loading}
-                  className="bg-green-600 text-white p-2 rounded-full hover:bg-green-500 transition shadow-lg"
+                  className="bg-green-600 text-gray-800 p-2 rounded-full hover:bg-green-500 transition shadow-lg"
                 >
                   <Check weight="bold" />
                 </button>
@@ -139,13 +139,13 @@ export default function ProfileHeader() {
           ) : (
             // --- MODO VISUALIZACIÓN ---
             <div className="flex items-center gap-2 group">
-                <h2 className="text-2xl font-bold text-white leading-tight truncate">
+                <h2 className="text-2xl font-bold text-gray-800 leading-tight truncate">
                   {user.displayName}
                 </h2>
                 {/* Botón lápiz que aparece suavemente */}
                 <button 
                   onClick={() => setIsEditing(true)}
-                  className="text-gray-500 hover:text-brand-gold p-1 rounded transition-colors opacity-100 sm:opacity-50 sm:group-hover:opacity-100"
+                  className="text-gray-500 hover:text-brand-secondary p-1 rounded transition-colors opacity-100 sm:opacity-50 sm:group-hover:opacity-100"
                 >
                   <PencilSimple size={20} weight="duotone" />
                 </button>
@@ -157,7 +157,7 @@ export default function ProfileHeader() {
             <>
               <p className="text-gray-400 text-xs mb-2">{user.email}</p>
               <div className="flex gap-2">
-                  <span className="text-[10px] font-black bg-brand-gold text-black px-2 py-0.5 rounded uppercase tracking-wider">
+                  <span className="text-[10px] font-black bg-brand-secondary text-black px-2 py-0.5 rounded uppercase tracking-wider">
                   {role === 'trainer' ? 'COACH' : 'ATLETA PRO'}
                   </span>
                   <span className="text-[10px] font-bold border border-white/10 text-gray-400 px-2 py-0.5 rounded uppercase tracking-wider">

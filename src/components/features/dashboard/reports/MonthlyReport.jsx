@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../../services/firebase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -80,12 +80,12 @@ export default function MonthlyReport() {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-bold text-white">Reporte Mensual</h3>
+      <h3 className="text-lg font-bold text-gray-800">Reporte Mensual</h3>
 
       {loading ? (
-        <div className="text-white/60 text-center py-8">Cargando...</div>
+        <div className="text-gray-800/60 text-center py-8">Cargando...</div>
       ) : monthlyData.length === 0 ? (
-        <div className="text-white/60 text-center py-8">Sin datos de este mes</div>
+        <div className="text-gray-800/60 text-center py-8">Sin datos de este mes</div>
       ) : (
         <>
           <div className="bg-black/40 rounded-lg p-4 border border-white/10">
@@ -119,28 +119,28 @@ export default function MonthlyReport() {
 
           <div className="grid grid-cols-3 gap-3">
             <div className="bg-black/40 rounded-lg p-4 border border-white/10">
-              <p className="text-white/60 text-sm">Total Reservas</p>
+              <p className="text-gray-800/60 text-sm">Total Reservas</p>
               <p className="text-2xl font-bold text-brand-neon">{totalReservations}</p>
             </div>
             <div className="bg-black/40 rounded-lg p-4 border border-white/10">
-              <p className="text-white/60 text-sm">Promedio/Semana</p>
+              <p className="text-gray-800/60 text-sm">Promedio/Semana</p>
               <p className="text-2xl font-bold text-brand-neon">{avgPerWeek}</p>
             </div>
             <div className="bg-black/40 rounded-lg p-4 border border-white/10">
-              <p className="text-white/60 text-sm">Total Clases</p>
+              <p className="text-gray-800/60 text-sm">Total Clases</p>
               <p className="text-2xl font-bold text-brand-neon">{totalClasses}</p>
             </div>
           </div>
 
           <div className="bg-black/40 rounded-lg p-4 border border-white/10 space-y-2 max-h-[200px] overflow-y-auto">
-            <p className="text-white font-bold mb-3">Detalles por semana</p>
+            <p className="text-gray-800 font-bold mb-3">Detalles por semana</p>
             {monthlyData.map((week, idx) => (
               <div key={idx} className="border-b border-white/10 pb-2 last:border-b-0">
                 <div className="flex justify-between items-start text-sm mb-1">
-                  <span className="text-white font-semibold">{week.week}</span>
+                  <span className="text-gray-800 font-semibold">{week.week}</span>
                   <span className="text-brand-neon font-semibold">{week.reservations} reservas</span>
                 </div>
-                <div className="text-white/60 text-xs">{week.date}</div>
+                <div className="text-gray-800/60 text-xs">{week.date}</div>
               </div>
             ))}
           </div>

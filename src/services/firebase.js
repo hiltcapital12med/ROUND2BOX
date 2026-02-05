@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/services/firebase.js
+﻿// UBICACIÓN: /src/services/firebase.js
 
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";

@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/hooks/useNotifications.js
+﻿// UBICACIÓN: /src/hooks/useNotifications.js
 import { useState, useEffect } from 'react';
 import {
   requestNotificationPermission,

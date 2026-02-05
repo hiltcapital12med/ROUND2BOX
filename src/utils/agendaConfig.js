@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/utils/agendaConfig.js
+﻿// UBICACIÓN: /src/utils/agendaConfig.js
 
 // Capacidad máxima por clase
 export const CLASS_CAPACITY = 4;

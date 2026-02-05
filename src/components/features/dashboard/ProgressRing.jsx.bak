@@ -1,0 +1,311 @@
+// UBICACIÓN: /src/components/features/dashboard/ProgressRing.jsx
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../../context/AuthContext';
+import { db } from '../../../services/firebase';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import {
+  getCurrentWeekRange,
+  calculateEffectiveDays,
+  calculateConsistencyPercentage,
+  getLevelFromConsistency
+} from '../../../utils/dateUtils';
+
+export default function ProgressRing() {
+  const { user } = useAuth();
+  const [monthlyData, setMonthlyData] = useState({
+    attendances: 0,
+    paidClasses: 0,
+    isUnlimited: false,
+    percentage: 0,
+    level: 'INICIADO',
+    streak: 0,
+    message: 'Comienza tu viaje',
+    classesRemaining: 0,
+    isExpired: false
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      calculateMonthlyProgress();
+    }
+  }, [user]);
+
+  const calculateMonthlyProgress = async () => {
+    try {
+      setLoading(true);
+
+      // Obtener datos del usuario (clases pagadas)
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const userData = userDoc.data() || {};
+      
+      const currentMonth = new Date().toISOString().slice(0, 7); // "2026-01"
+      const paidClassesMonth = userData.paidClassesMonth || '';
+      const paidClasses = userData.paidClasses ?? 0;
+      
+      // Verificar si el paquete es del mes actual
+      const isCurrentMonth = paidClassesMonth === currentMonth;
+      const activePaidClasses = isCurrentMonth ? paidClasses : 0;
+      const isUnlimited = activePaidClasses === -1;
+
+      // Obtener inicio y fin del mes actual
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+
+      // Obtener asistencias del mes
+      const userAttendanceRef = collection(db, 'users', user.uid, 'attendance');
+      const querySnapshot = await getDocs(query(userAttendanceRef));
+
+      let monthlyAttendances = 0;
+      querySnapshot.docs.forEach((doc) => {
+        const attendanceDate = new Date(doc.data().date);
+        if (
+          attendanceDate >= startOfMonth &&
+          attendanceDate <= endOfMonth &&
+          doc.data().attended
+        ) {
+          monthlyAttendances++;
+        }
+      });
+
+      // Calcular racha
+      const streak = await calculateCurrentStreak();
+
+      // Calcular porcentaje y nivel
+      let percentage = 0;
+      let classesRemaining = 0;
+      
+      if (isUnlimited) {
+        // Para ilimitado, usamos las clases posibles del mes como referencia
+        const possibleClasses = calculateEffectiveDays(startOfMonth, endOfMonth);
+        percentage = calculateConsistencyPercentage(monthlyAttendances, possibleClasses);
+        classesRemaining = -1; // Infinito
+      } else if (activePaidClasses > 0) {
+        percentage = Math.min(100, Math.round((monthlyAttendances / activePaidClasses) * 100));
+        classesRemaining = Math.max(0, activePaidClasses - monthlyAttendances);
+      }
+
+      const { level, message } = getLevelFromConsistency(percentage);
+
+      setMonthlyData({
+        attendances: monthlyAttendances,
+        paidClasses: activePaidClasses,
+        isUnlimited,
+        percentage,
+        level,
+        streak,
+        message: activePaidClasses === 0 ? 'Activa tu plan mensual' : message,
+        classesRemaining,
+        isExpired: !isCurrentMonth && paidClasses > 0
+      });
+    } catch (error) {
+      console.error('Error calculando progreso:', error);
+      setMonthlyData({
+        attendances: 0,
+        paidClasses: 0,
+        isUnlimited: false,
+        percentage: 0,
+        level: 'INICIADO',
+        streak: 0,
+        message: 'Comienza tu viaje',
+        classesRemaining: 0,
+        isExpired: false
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const calculateCurrentStreak = async () => {
+    try {
+      const userAttendanceRef = collection(db, 'users', user.uid, 'attendance');
+      const q = query(userAttendanceRef);
+      const querySnapshot = await getDocs(q);
+
+      // Ordenar por fecha descendente
+      const sortedDocs = querySnapshot.docs.sort((a, b) =>
+        new Date(b.data().date) - new Date(a.data().date)
+      );
+
+      let streak = 0;
+      let lastDate = null;
+
+      for (const doc of sortedDocs) {
+        if (!doc.data().attended) continue;
+
+        const docDate = new Date(doc.data().date);
+        docDate.setHours(0, 0, 0, 0);
+
+        if (lastDate === null) {
+          lastDate = docDate;
+          streak = 1;
+        } else {
+          const dayDiff = Math.floor(
+            (lastDate - docDate) / (1000 * 60 * 60 * 24)
+          );
+
+          if (dayDiff === 1) {
+            streak++;
+            lastDate = docDate;
+          } else {
+            break;
+          }
+        }
+      }
+
+      return streak;
+    } catch (error) {
+      console.error('Error calculando racha:', error);
+      return 0;
+    }
+  };
+
+  // Calcular offset para la rueda (0-100%)
+  const circumference = 283.27; // 2 * Math.PI * 45
+  const strokeDashoffset = circumference * (1 - monthlyData.percentage / 100);
+
+  // Determinar color basado en nivel
+  const getColorClass = () => {
+    switch (monthlyData.level) {
+      case 'ÉLITE':
+        return 'text-brand-red';
+      case 'PRO':
+        return 'text-brand-red';
+      case 'CONSISTENTE':
+        return 'text-brand-red';
+      default:
+        return 'text-white';
+    }
+  };
+
+  // Color del anillo según estado
+  const getRingGradient = () => {
+    if (monthlyData.paidClasses === 0) return 'url(#inactiveGradient)';
+    if (monthlyData.classesRemaining === 0 && !monthlyData.isUnlimited) return 'url(#warningGradient)';
+    return 'url(#progressGradient)';
+  };
+
+  if (loading) {
+    return (
+      <div className="relative w-56 h-56 flex items-center justify-center">
+        <div className="text-center">
+          <span className="text-white/60 text-sm">Cargando progreso...</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-56 h-56 flex items-center justify-center">
+      {/* SVG del Anillo de Progreso */}
+      <svg className="w-full h-full rotate-[-90deg]" viewBox="0 0 100 100">
+        {/* Círculo base (gris oscuro) */}
+        <circle
+          cx="50"
+          cy="50"
+          r="45"
+          fill="none"
+          stroke="#171717"
+          strokeWidth="8"
+        />
+        {/* Círculo de progreso */}
+        <circle
+          cx="50"
+          cy="50"
+          r="45"
+          fill="none"
+          stroke={getRingGradient()}
+          strokeWidth="8"
+          strokeDasharray={circumference}
+          strokeDashoffset={strokeDashoffset}
+          className="transition-all duration-1000 ease-out"
+          strokeLinecap="round"
+        />
+        {/* Definiciones de Gradientes */}
+        <defs>
+          <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#E30613" />
+            <stop offset="100%" stopColor="#CBA135" />
+          </linearGradient>
+          <linearGradient id="warningGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#EF4444" />
+            <stop offset="100%" stopColor="#F59E0B" />
+          </linearGradient>
+          <linearGradient id="inactiveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#374151" />
+            <stop offset="100%" stopColor="#4B5563" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      {/* CONTENIDO CENTRAL DEL NÚCLEO */}
+      <div className="absolute text-center z-10">
+        <span className="block text-brand-gray200 text-xs font-bold uppercase tracking-widest mb-1">
+          Este Mes
+        </span>
+        
+        {monthlyData.paidClasses === 0 ? (
+          <>
+            <span className="block text-3xl font-black leading-none text-gray-500">
+              SIN PLAN
+            </span>
+            <div className="mt-3">
+              <span className="text-xs text-gray-400">Contacta al admin</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <span className={`block text-4xl font-black leading-none ${getColorClass()}`}>
+              {monthlyData.level}
+            </span>
+            
+            {/* Contador de clases */}
+            <div className="mt-3 flex flex-col items-center gap-1">
+              <span className="block text-2xl font-bold text-white">
+                {monthlyData.attendances}/{monthlyData.isUnlimited ? '∞' : monthlyData.paidClasses}
+              </span>
+              <span className="block text-xs text-gray-400">
+                clases usadas
+              </span>
+            </div>
+
+            {/* Alerta de clases restantes */}
+            {!monthlyData.isUnlimited && monthlyData.classesRemaining <= 2 && monthlyData.classesRemaining > 0 && (
+              <div className="mt-2 inline-block bg-yellow-500/20 border border-yellow-500 rounded-full px-2 py-1">
+                <span className="text-xs text-yellow-400 font-bold">
+                  ⚠️ {monthlyData.classesRemaining} clase{monthlyData.classesRemaining > 1 ? 's' : ''} restante{monthlyData.classesRemaining > 1 ? 's' : ''}
+                </span>
+              </div>
+            )}
+            
+            {/* Alerta de clases agotadas */}
+            {!monthlyData.isUnlimited && monthlyData.classesRemaining === 0 && (
+              <div className="mt-2 inline-block bg-red-500/20 border border-red-500 rounded-full px-2 py-1">
+                <span className="text-xs text-red-400 font-bold">
+                  🚫 Plan agotado
+                </span>
+              </div>
+            )}
+
+            {/* Racha */}
+            {monthlyData.streak > 0 && monthlyData.classesRemaining !== 0 && (
+              <div className="mt-2 inline-block bg-brand-red/20 border border-brand-red rounded-full px-2 py-1">
+                <span className="text-xs text-brand-red font-bold">
+                  🔥 {monthlyData.streak} días consecutivos
+                </span>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Mensaje motivador debajo - ahora dentro del flujo */}
+      <div className="absolute -bottom-10 left-0 right-0 text-center px-4">
+        <span className="text-sm text-white/70 font-medium">
+          {monthlyData.message}
+        </span>
+      </div>
+    </div>
+  );
+}

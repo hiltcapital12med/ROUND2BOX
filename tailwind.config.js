@@ -9,10 +9,11 @@ export default {
       // NUESTRA PALETA PERSONALIZADA ROUND2
       colors: {
         brand: {
-          red: '#E30613',      // El rojo vibrante del logo
-          dark: '#0A0A0A',     // Negro casi puro, muy sobrio
-          charcoal: '#171717', // Un gris muy oscuro para contrastes
-          gold: '#CBA135',     // Dorado metálico sofisticado (no amarillo)
+          primary: '#0a2463',    // Azul oscuro principal
+          secondary: '#3e92cc',  // Azul claro secundario
+          accent: '#d8315b',     // Rosa/rojo acento
+          light: '#fffaff',      // Blanco crema
+          dark: '#f5f5f5',       // Gris muy claro para fondos
         }
       },
       // Tipografía moderna y fuerte

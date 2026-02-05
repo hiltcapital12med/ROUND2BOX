@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { db } from '../../../services/firebase';
 import { doc, getDoc, setDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { SCHEDULES } from '../../../utils/agendaConfig';
@@ -160,33 +160,33 @@ export default function ScheduleConfig({ onClose }) {
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
   if (loading && Object.keys(config).length === 0) {
-    return <div className="text-white/60 text-center py-4">Cargando...</div>;
+    return <div className="text-gray-800/60 text-center py-4">Cargando...</div>;
   }
 
   return (
     <div className="space-y-6">
       {/* Encabezado */}
       <div>
-        <h3 className="text-lg font-bold text-white mb-2">Configurar Horarios</h3>
-        <p className="text-white/60 text-sm">Planifica los horarios disponibles día a día</p>
+        <h3 className="text-lg font-bold text-gray-800 mb-2">Configurar Horarios</h3>
+        <p className="text-gray-800/60 text-sm">Planifica los horarios disponibles día a día</p>
       </div>
 
       {/* Selector de Semana */}
       <div className="bg-black/40 rounded-lg p-4 border border-white/10">
         <div className="flex justify-between items-center mb-3">
-          <h4 className="text-white font-bold text-sm">Selecciona semana</h4>
+          <h4 className="text-gray-800 font-bold text-sm">Selecciona semana</h4>
           <div className="flex gap-2">
             <button 
               onClick={() => setSelectedDate(addDays(selectedDate, -7))}
               className="p-1 hover:bg-white/10 rounded"
             >
-              <CaretLeft size={16} className="text-white" weight="fill" />
+              <CaretLeft size={16} className="text-gray-800" weight="fill" />
             </button>
             <button 
               onClick={() => setSelectedDate(addDays(selectedDate, 7))}
               className="p-1 hover:bg-white/10 rounded"
             >
-              <CaretRight size={16} className="text-white" weight="fill" />
+              <CaretRight size={16} className="text-gray-800" weight="fill" />
             </button>
           </div>
         </div>
@@ -200,7 +200,7 @@ export default function ScheduleConfig({ onClose }) {
               className={`p-2 rounded text-xs font-bold transition-all ${
                 isSameDay(day, selectedDate)
                   ? 'bg-brand-neon text-black'
-                  : 'bg-black/40 text-white hover:bg-black/60'
+                  : 'bg-black/40 text-gray-800 hover:bg-black/60'
               }`}
             >
               <div>{format(day, 'EEE', { locale: es }).toUpperCase().substring(0, 1)}</div>
@@ -212,10 +212,10 @@ export default function ScheduleConfig({ onClose }) {
 
       {/* Información del Día Seleccionado */}
       <div className="bg-brand-neon/10 rounded-lg p-4 border border-brand-neon/30">
-        <p className="text-white font-bold">
+        <p className="text-gray-800 font-bold">
           📅 {format(selectedDate, 'EEEE, d \'de\' MMMM \'de\' yyyy', { locale: es })}
         </p>
-        <p className="text-white/60 text-sm mt-1">
+        <p className="text-gray-800/60 text-sm mt-1">
           {dayOfWeek === 0 ? '❌ Domingo - Cerrado' : 
            dayOfWeek === 6 ? '🏋️ Sábado' : 
            '📆 Lunes a Viernes'}
@@ -224,20 +224,20 @@ export default function ScheduleConfig({ onClose }) {
 
       {/* Capacidad para este día */}
       <div className="bg-black/40 p-4 rounded-lg border border-white/10">
-        <label className="block text-white font-bold text-sm mb-2">Capacidad máxima para este día</label>
+        <label className="block text-gray-800 font-bold text-sm mb-2">Capacidad máxima para este día</label>
         <input 
           type="number" 
           min="1"
           max="20"
           value={dayConfig.capacity || 4}
           onChange={(e) => handleCapacityChange(e.target.value)}
-          className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-white"
+          className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-gray-800"
         />
       </div>
 
       {/* Horarios del día */}
       <div className="space-y-3">
-        <h4 className="text-white font-bold text-sm">
+        <h4 className="text-gray-800 font-bold text-sm">
           {dayOfWeek === 0 ? 'No hay horarios (domingo cerrado)' : 'Horarios disponibles'}
         </h4>
         
@@ -258,19 +258,19 @@ export default function ScheduleConfig({ onClose }) {
                   className="flex items-center justify-between mb-2 cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`text-xl ${dayConfig.enabled?.[slot.id] ? 'text-brand-neon' : 'text-white/40'}`}>
+                    <div className={`text-xl ${dayConfig.enabled?.[slot.id] ? 'text-brand-neon' : 'text-gray-800/40'}`}>
                       {dayConfig.enabled?.[slot.id] ? '✓' : '✗'}
                     </div>
                     <div>
-                      <p className="text-white font-bold">{slot.time}</p>
-                      <p className="text-white/60 text-xs">{slot.label}</p>
+                      <p className="text-gray-800 font-bold">{slot.time}</p>
+                      <p className="text-gray-800/60 text-xs">{slot.label}</p>
                     </div>
                   </div>
                   <div>
                     {dayConfig.enabled?.[slot.id] ? (
                       <Eye size={20} className="text-brand-neon" weight="fill" />
                     ) : (
-                      <EyeSlash size={20} className="text-white/40" weight="fill" />
+                      <EyeSlash size={20} className="text-gray-800/40" weight="fill" />
                     )}
                   </div>
                 </div>
@@ -278,13 +278,13 @@ export default function ScheduleConfig({ onClose }) {
                 {/* Asignación de Entrenador */}
                 {dayConfig.enabled?.[slot.id] && (
                   <div className="ml-8 bg-black/30 p-3 rounded border border-white/10">
-                    <label className="block text-white/80 text-xs font-bold mb-2 flex items-center gap-1">
+                    <label className="block text-gray-800/80 text-xs font-bold mb-2 flex items-center gap-1">
                       <User size={14} /> Entrenador
                     </label>
                     <select
                       value={dayConfig.trainers?.[slot.id] || ''}
                       onChange={(e) => handleAssignTrainer(slot.id, e.target.value)}
-                      className="w-full px-2 py-1 bg-black/40 border border-white/20 rounded text-white text-sm"
+                      className="w-full px-2 py-1 bg-black/40 border border-white/20 rounded text-gray-800 text-sm"
                     >
                       <option value="">Sin asignar</option>
                       {trainers.map(trainer => (
@@ -299,7 +299,7 @@ export default function ScheduleConfig({ onClose }) {
             ))}
           </div>
         ) : (
-          <p className="text-white/60 text-center py-4">El domingo el gimnasio está cerrado</p>
+          <p className="text-gray-800/60 text-center py-4">El domingo el gimnasio está cerrado</p>
         )}
       </div>
 
@@ -315,13 +315,13 @@ export default function ScheduleConfig({ onClose }) {
       <button 
         onClick={handleSaveConfig}
         disabled={loading || saved}
-        className="w-full px-4 py-3 bg-brand-gold text-black rounded-lg hover:bg-yellow-500 font-bold transition-all disabled:opacity-50"
+        className="w-full px-4 py-3 bg-brand-secondary text-black rounded-lg hover:bg-yellow-500 font-bold transition-all disabled:opacity-50"
       >
         💾 Guardar Cambios
       </button>
 
       {/* Resumen */}
-      <div className="bg-black/40 rounded-lg p-3 border border-white/10 text-xs text-white/70">
+      <div className="bg-black/40 rounded-lg p-3 border border-white/10 text-xs text-gray-800/70">
         <p>
           Clases habilitadas hoy: 
           <span className="text-brand-neon font-bold ml-1">

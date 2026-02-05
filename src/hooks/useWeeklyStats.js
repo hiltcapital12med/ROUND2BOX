@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/hooks/useWeeklyStats.js
+﻿// UBICACIÓN: /src/hooks/useWeeklyStats.js
 // Hook para obtener estadísticas semanales del usuario
 
 import { useState, useEffect } from 'react';

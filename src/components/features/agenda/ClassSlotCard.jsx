@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { CheckCircle, Clock, Users, Warning } from '@phosphor-icons/react';
 import { useTrainerForClass } from '../../../hooks/useTrainerForClass';
 
@@ -20,8 +20,8 @@ export default function ClassSlotCard({
   return (
     <div key={slot.id} className={`relative rounded-2xl border p-5 transition-all ${
       isBooked 
-      ? 'bg-brand-charcoal border-brand-gold shadow-gold-glow'
-      : 'bg-brand-charcoal border-white/5'
+      ? 'bg-brand-dark border-brand-secondary shadow-gold-glow'
+      : 'bg-brand-dark border-white/5'
     }`}>
       
       {/* ALERTAS DE CAPACIDAD */}
@@ -43,8 +43,8 @@ export default function ClassSlotCard({
       <div className="flex justify-between items-start mb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Clock size={18} className="text-brand-gold" />
-            <span className="text-2xl font-black text-white">{slot.time}</span>
+            <Clock size={18} className="text-brand-secondary" />
+            <span className="text-2xl font-black text-gray-800">{slot.time}</span>
           </div>
           <span className="text-sm text-gray-400 uppercase tracking-wider">{slot.label}</span>
         </div>
@@ -57,7 +57,7 @@ export default function ClassSlotCard({
           </div>
           <div className="w-20 h-1.5 bg-gray-700 rounded-full overflow-hidden">
             <div 
-              className={`h-full rounded-full ${isFull ? 'bg-brand-red' : 'bg-brand-gold'}`} 
+              className={`h-full rounded-full ${isFull ? 'bg-brand-accent' : 'bg-brand-secondary'}`} 
               style={{ width: `${(attendees.length / capacity) * 100}%` }}
             ></div>
           </div>
@@ -65,12 +65,12 @@ export default function ClassSlotCard({
       </div>
 
       {/* ENTRENADOR ASIGNADO */}
-      <div className="mb-4 p-3 bg-brand-gold/10 border border-brand-gold/30 rounded-lg">
-        <p className="text-xs text-brand-gold/80 uppercase font-bold mb-1">👨‍🏫 Entrenador</p>
+      <div className="mb-4 p-3 bg-brand-secondary/10 border border-brand-secondary/30 rounded-lg">
+        <p className="text-xs text-brand-secondary/80 uppercase font-bold mb-1">👨‍🏫 Entrenador</p>
         {trainerLoading ? (
           <p className="text-sm text-gray-400">Cargando...</p>
         ) : trainer ? (
-          <p className="text-sm font-bold text-white">{trainer.name}</p>
+          <p className="text-sm font-bold text-gray-800">{trainer.name}</p>
         ) : (
           <p className="text-sm text-gray-500">Por asignar</p>
         )}
@@ -93,7 +93,7 @@ export default function ClassSlotCard({
           ) : (
             <button 
               onClick={() => onBook(slot.time)}
-              className="w-full py-3 rounded-xl bg-brand-gold text-black font-bold text-sm hover:bg-brand-gold/90 transition shadow-lg shadow-brand-gold/20"
+              className="w-full py-3 rounded-xl bg-brand-secondary text-black font-bold text-sm hover:bg-brand-secondary/90 transition shadow-lg shadow-brand-secondary/20"
             >
               Reservar
             </button>
@@ -104,7 +104,7 @@ export default function ClassSlotCard({
       {/* ZONA DE ACCIÓN: ENTRENADOR (ADMIN) */}
       {(role === 'trainer' || role === 'admin') && (
         <div className="mt-4 pt-4 border-t border-white/10">
-          <h4 className="text-xs text-brand-gold uppercase font-bold mb-3">Lista de Asistencia ({attendees.length}/{capacity})</h4>
+          <h4 className="text-xs text-brand-secondary uppercase font-bold mb-3">Lista de Asistencia ({attendees.length}/{capacity})</h4>
           {attendees.length === 0 ? (
             <p className="text-gray-500 text-xs italic">Nadie inscrito aún.</p>
           ) : (
@@ -113,7 +113,7 @@ export default function ClassSlotCard({
                 <div key={student.uid} className="flex items-center justify-between bg-black/20 p-2 rounded-lg">
                   <div className="flex items-center gap-2">
                     <img src={student.photo || 'https://via.placeholder.com/30'} className="w-6 h-6 rounded-full" />
-                    <span className={`text-sm ${student.status === 'attended' ? 'text-white' : 'text-gray-400'}`}>
+                    <span className={`text-sm ${student.status === 'attended' ? 'text-gray-800' : 'text-gray-400'}`}>
                       {student.name}
                     </span>
                   </div>
@@ -121,7 +121,7 @@ export default function ClassSlotCard({
                     onClick={() => onToggleAttendance(slot.time, student.uid, student.status)}
                     className={`p-1.5 rounded-full transition ${
                       student.status === 'attended' 
-                      ? 'bg-green-500 text-white shadow-[0_0_10px_rgba(34,197,94,0.5)]' 
+                      ? 'bg-green-500 text-gray-800 shadow-[0_0_10px_rgba(34,197,94,0.5)]' 
                       : 'bg-gray-700 text-gray-500'
                     }`}
                   >

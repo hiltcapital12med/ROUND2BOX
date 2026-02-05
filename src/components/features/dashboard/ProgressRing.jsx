@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/components/features/dashboard/ProgressRing.jsx
+﻿// UBICACIÓN: /src/components/features/dashboard/ProgressRing.jsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { db } from '../../../services/firebase';
@@ -145,13 +145,13 @@ export default function ProgressRing() {
   const getColorClass = () => {
     switch (weeklyData.level) {
       case 'ÉLITE':
-        return 'text-brand-gold';
+        return 'text-brand-secondary';
       case 'PRO':
-        return 'text-brand-red';
+        return 'text-brand-accent';
       case 'CONSISTENTE':
         return 'text-orange-400';
       default:
-        return 'text-white';
+        return 'text-gray-800';
     }
   };
 
@@ -159,7 +159,7 @@ export default function ProgressRing() {
     return (
       <div className="relative w-56 h-56 flex items-center justify-center">
         <div className="text-center">
-          <span className="text-white/60 text-sm">Cargando progreso...</span>
+          <span className="text-gray-800/60 text-sm">Cargando progreso...</span>
         </div>
       </div>
     );
@@ -208,7 +208,7 @@ export default function ProgressRing() {
 
       {/* CONTENIDO CENTRAL DEL NÚCLEO */}
       <div className="absolute text-center z-10">
-        <span className="block text-brand-gold text-xs font-bold uppercase tracking-widest mb-1">
+        <span className="block text-brand-secondary text-xs font-bold uppercase tracking-widest mb-1">
           Esta Semana
         </span>
         <span className={`block text-5xl font-black leading-none ${getColorClass()}`}>
@@ -217,7 +217,7 @@ export default function ProgressRing() {
         
         {/* Porcentaje en la mitad */}
         <div className="mt-3 flex flex-col items-center gap-1">
-          <span className="block text-2xl font-bold text-white">
+          <span className="block text-2xl font-bold text-gray-800">
             {weeklyData.consistency}%
           </span>
           <span className="block text-xs text-gray-400">
@@ -227,8 +227,8 @@ export default function ProgressRing() {
 
         {/* Racha */}
         {weeklyData.streak > 0 && (
-          <div className="mt-2 inline-block bg-brand-red/20 border border-brand-red rounded-full px-2 py-1">
-            <span className="text-xs text-brand-red font-bold">
+          <div className="mt-2 inline-block bg-brand-accent/20 border border-brand-accent rounded-full px-2 py-1">
+            <span className="text-xs text-brand-accent font-bold">
               🔥 {weeklyData.streak} días consecutivos
             </span>
           </div>
@@ -237,7 +237,7 @@ export default function ProgressRing() {
 
       {/* Mensaje motivador debajo */}
       <div className="absolute -bottom-16 text-center">
-        <span className="text-sm text-white/80 font-medium">
+        <span className="text-sm text-gray-800/80 font-medium">
           {weeklyData.message}
         </span>
       </div>

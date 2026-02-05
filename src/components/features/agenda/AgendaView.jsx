@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/components/features/agenda/AgendaView.jsx
+﻿// UBICACIÓN: /src/components/features/agenda/AgendaView.jsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { getDailySlots, CLASS_CAPACITY, isColombianHoliday, COLOMBIAN_HOLIDAYS } from '../../../utils/agendaConfig';
@@ -201,8 +201,8 @@ export default function AgendaView() {
                     onClick={() => setSelectedDate(date)}
                     className={`flex flex-col items-center justify-center min-w-[60px] h-[70px] rounded-xl border transition-all ${
                         isSelected 
-                        ? 'bg-brand-red text-white border-brand-red shadow-lg shadow-brand-red/30' 
-                        : 'bg-brand-charcoal text-gray-400 border-white/10 hover:border-brand-gold/50'
+                        ? 'bg-brand-accent text-gray-800 border-brand-accent shadow-lg shadow-brand-accent/30' 
+                        : 'bg-brand-dark text-gray-400 border-white/10 hover:border-brand-secondary/50'
                     }`}
                 >
                     <span className="text-xs uppercase font-bold">{dayName}</span>
@@ -218,7 +218,7 @@ export default function AgendaView() {
             <div className="text-center text-gray-500 py-10">
                 {isColombianHoliday(selectedDate) ? (
                     <div className="space-y-2">
-                        <p className="text-lg font-bold text-brand-gold">🎉 ¡Festivo en Colombia!</p>
+                        <p className="text-lg font-bold text-brand-secondary">🎉 ¡Festivo en Colombia!</p>
                         <p>Hoy no hay entrenamiento. ¡Disfruta el descanso!</p>
                     </div>
                 ) : (

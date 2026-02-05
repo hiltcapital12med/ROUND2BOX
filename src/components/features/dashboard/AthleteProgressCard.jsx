@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/components/features/dashboard/AthleteProgressCard.jsx
+﻿// UBICACIÓN: /src/components/features/dashboard/AthleteProgressCard.jsx
 // Tarjeta de progreso semanal del atleta (Vista del Entrenador/Admin)
 
 import React, { useState, useEffect } from 'react';
@@ -103,7 +103,7 @@ export default function AthleteProgressCard({ athleteId, athleteName = 'Atleta' 
 
   if (loading) {
     return (
-      <div className="bg-brand-charcoal border border-white/10 rounded-lg p-4 animate-pulse">
+      <div className="bg-brand-dark border border-white/10 rounded-lg p-4 animate-pulse">
         <div className="h-4 bg-gray-700 rounded w-3/4 mb-2"></div>
         <div className="h-4 bg-gray-700 rounded w-1/2"></div>
       </div>
@@ -113,13 +113,13 @@ export default function AthleteProgressCard({ athleteId, athleteName = 'Atleta' 
   const getColorClass = () => {
     switch (progress.level) {
       case 'ÉLITE':
-        return 'bg-brand-gold/10 border-brand-gold text-brand-gold';
+        return 'bg-brand-secondary/10 border-brand-secondary text-brand-secondary';
       case 'PRO':
-        return 'bg-brand-red/10 border-brand-red text-brand-red';
+        return 'bg-brand-accent/10 border-brand-accent text-brand-accent';
       case 'CONSISTENTE':
         return 'bg-orange-500/10 border-orange-500 text-orange-400';
       default:
-        return 'bg-white/5 border-white/10 text-white/60';
+        return 'bg-white/5 border-white/10 text-gray-800/60';
     }
   };
 
@@ -127,12 +127,12 @@ export default function AthleteProgressCard({ athleteId, athleteName = 'Atleta' 
     <div className={`border rounded-lg p-3 transition-all ${getColorClass()}`}>
       <div className="flex items-center justify-between mb-2">
         <div>
-          <p className="text-sm font-bold text-white">{athleteName}</p>
-          <p className="text-xs text-white/60">{progress.level}</p>
+          <p className="text-sm font-bold text-gray-800">{athleteName}</p>
+          <p className="text-xs text-gray-800/60">{progress.level}</p>
         </div>
         <div className="text-right">
           <p className="text-lg font-bold">{progress.consistency}%</p>
-          <p className="text-xs text-white/60">{progress.attendances}/{progress.totalClasses}</p>
+          <p className="text-xs text-gray-800/60">{progress.attendances}/{progress.totalClasses}</p>
         </div>
       </div>
 
@@ -141,9 +141,9 @@ export default function AthleteProgressCard({ athleteId, athleteName = 'Atleta' 
         <div
           className={`h-full ${
             progress.level === 'ÉLITE'
-              ? 'bg-brand-gold'
+              ? 'bg-brand-secondary'
               : progress.level === 'PRO'
-              ? 'bg-brand-red'
+              ? 'bg-brand-accent'
               : 'bg-orange-400'
           }`}
           style={{ width: `${progress.consistency}%` }}
@@ -153,7 +153,7 @@ export default function AthleteProgressCard({ athleteId, athleteName = 'Atleta' 
       {/* Racha */}
       {progress.streak > 0 && (
         <div className="flex items-center gap-1 text-xs">
-          <Flame size={12} className="text-brand-red" />
+          <Flame size={12} className="text-brand-accent" />
           <span>{progress.streak} días</span>
         </div>
       )}

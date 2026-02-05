@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/components/features/notifications/NotificationManager.jsx
+﻿// UBICACIÓN: /src/components/features/notifications/NotificationManager.jsx
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useNotifications } from '../../../hooks/useNotifications';
@@ -59,8 +59,8 @@ export default function NotificationManager({ upcomingClasses = [] }) {
           onClick={() => setShowSettings(!showSettings)}
           className={`flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-all ${
             notificationsEnabled
-              ? 'bg-brand-gold text-black hover:scale-110'
-              : 'bg-gray-600 text-white hover:scale-110'
+              ? 'bg-brand-secondary text-black hover:scale-110'
+              : 'bg-gray-600 text-gray-800 hover:scale-110'
           }`}
           title={notificationsEnabled ? 'Notificaciones activas' : 'Activar notificaciones'}
         >
@@ -73,8 +73,8 @@ export default function NotificationManager({ upcomingClasses = [] }) {
 
         {/* Panel de configuración de notificaciones */}
         {showSettings && (
-          <div className="absolute bottom-16 right-0 bg-brand-charcoal border border-white/10 rounded-2xl p-4 w-80 shadow-2xl animate-fade-in-up">
-            <h3 className="text-white font-bold text-lg mb-4">Notificaciones Push</h3>
+          <div className="absolute bottom-16 right-0 bg-brand-dark border border-white/10 rounded-2xl p-4 w-80 shadow-2xl animate-fade-in-up">
+            <h3 className="text-gray-800 font-bold text-lg mb-4">Notificaciones Push</h3>
 
             {/* Estado de permiso */}
             <div className="mb-4 p-3 bg-black/30 rounded-lg border border-white/5">
@@ -85,7 +85,7 @@ export default function NotificationManager({ upcomingClasses = [] }) {
                     notificationsEnabled ? 'bg-green-500' : 'bg-red-500'
                   }`}
                 ></div>
-                <span className="text-white font-bold">
+                <span className="text-gray-800 font-bold">
                   {notificationsEnabled ? 'Activas' : 'Desactivadas'}
                 </span>
               </div>
@@ -100,7 +100,7 @@ export default function NotificationManager({ upcomingClasses = [] }) {
                   onChange={handleToggleNotifications}
                   className="w-4 h-4 rounded bg-white/20 border border-white/30 cursor-pointer"
                 />
-                <span className="text-sm text-white">Mensajes de motivación</span>
+                <span className="text-sm text-gray-800">Mensajes de motivación</span>
               </label>
 
               <label className="flex items-center gap-3 cursor-pointer opacity-50">
@@ -110,7 +110,7 @@ export default function NotificationManager({ upcomingClasses = [] }) {
                   disabled
                   className="w-4 h-4 rounded bg-white/20 border border-white/30 cursor-pointer"
                 />
-                <span className="text-sm text-white">Recordatorios de clase</span>
+                <span className="text-sm text-gray-800">Recordatorios de clase</span>
               </label>
 
               <label className="flex items-center gap-3 cursor-pointer opacity-50">
@@ -120,7 +120,7 @@ export default function NotificationManager({ upcomingClasses = [] }) {
                   disabled
                   className="w-4 h-4 rounded bg-white/20 border border-white/30 cursor-pointer"
                 />
-                <span className="text-sm text-white">Progreso semanal</span>
+                <span className="text-sm text-gray-800">Progreso semanal</span>
               </label>
 
               <label className="flex items-center gap-3 cursor-pointer opacity-50">
@@ -130,7 +130,7 @@ export default function NotificationManager({ upcomingClasses = [] }) {
                   disabled
                   className="w-4 h-4 rounded bg-white/20 border border-white/30 cursor-pointer"
                 />
-                <span className="text-sm text-white">Progreso mensual</span>
+                <span className="text-sm text-gray-800">Progreso mensual</span>
               </label>
             </div>
 
@@ -144,7 +144,7 @@ export default function NotificationManager({ upcomingClasses = [] }) {
             {permissionStatus === 'default' && (
               <button
                 onClick={handleToggleNotifications}
-                className="w-full py-2 bg-brand-red text-white font-bold rounded-lg hover:bg-red-700 transition text-sm"
+                className="w-full py-2 bg-brand-accent text-gray-800 font-bold rounded-lg hover:bg-red-700 transition text-sm"
               >
                 Activar Notificaciones
               </button>

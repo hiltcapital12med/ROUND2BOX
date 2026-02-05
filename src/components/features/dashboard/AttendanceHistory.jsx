@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { db } from '../../../services/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
@@ -64,15 +64,15 @@ export default function AttendanceHistory() {
     <div className="space-y-4">
       {/* Encabezado */}
       <div>
-        <h3 className="text-lg font-bold text-white mb-2">📋 Historial de Asistencia</h3>
-        <p className="text-white/60 text-sm">Seguimiento de todas tus clases</p>
+        <h3 className="text-lg font-bold text-gray-800 mb-2">📋 Historial de Asistencia</h3>
+        <p className="text-gray-800/60 text-sm">Seguimiento de todas tus clases</p>
       </div>
 
       {/* Estadísticas */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-white/5 border border-white/10 rounded-lg p-3 text-center">
-          <p className="text-2xl font-bold text-white">{stats.total}</p>
-          <p className="text-xs text-white/60 mt-1">Total</p>
+          <p className="text-2xl font-bold text-gray-800">{stats.total}</p>
+          <p className="text-xs text-gray-800/60 mt-1">Total</p>
         </div>
         <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 text-center">
           <p className="text-2xl font-bold text-green-400">{stats.attended}</p>
@@ -91,7 +91,7 @@ export default function AttendanceHistory() {
           className={`px-3 py-1 rounded-full text-sm font-bold transition ${
             filter === 'all'
               ? 'bg-white text-black'
-              : 'bg-white/10 text-white hover:bg-white/20'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           Todos
@@ -100,8 +100,8 @@ export default function AttendanceHistory() {
           onClick={() => setFilter('attended')}
           className={`px-3 py-1 rounded-full text-sm font-bold transition ${
             filter === 'attended'
-              ? 'bg-green-500 text-white'
-              : 'bg-white/10 text-white hover:bg-white/20'
+              ? 'bg-green-500 text-gray-800'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           ✓ Asistió
@@ -110,8 +110,8 @@ export default function AttendanceHistory() {
           onClick={() => setFilter('missed')}
           className={`px-3 py-1 rounded-full text-sm font-bold transition ${
             filter === 'missed'
-              ? 'bg-red-500 text-white'
-              : 'bg-white/10 text-white hover:bg-white/20'
+              ? 'bg-red-500 text-gray-800'
+              : 'bg-white/10 text-gray-800 hover:bg-white/20'
           }`}
         >
           Faltó
@@ -120,9 +120,9 @@ export default function AttendanceHistory() {
 
       {/* Historial */}
       {loading ? (
-        <div className="text-white/60 text-center py-8">Cargando historial...</div>
+        <div className="text-gray-800/60 text-center py-8">Cargando historial...</div>
       ) : filteredHistory.length === 0 ? (
-        <div className="text-white/60 text-center py-8">
+        <div className="text-gray-800/60 text-center py-8">
           {attendanceHistory.length === 0
             ? 'No tienes registros de asistencia aún'
             : `No hay registros con el filtro seleccionado`}
@@ -147,20 +147,20 @@ export default function AttendanceHistory() {
               </div>
               <div className="flex-grow">
                 <div className="flex items-center gap-2 mb-1">
-                  <Calendar size={14} className="text-white/60" />
-                  <p className="text-sm font-semibold text-white">
+                  <Calendar size={14} className="text-gray-800/60" />
+                  <p className="text-sm font-semibold text-gray-800">
                     {format(parseISO(record.date), 'EEEE, d \'de\' MMMM', { locale: es })}
                   </p>
                 </div>
-                <p className="text-xs text-white/60">
+                <p className="text-xs text-gray-800/60">
                   Clase: {record.classTime}h
                 </p>
               </div>
               <div className="flex-shrink-0">
                 <span className={`text-xs px-2 py-1 rounded-full font-bold ${
                   record.attended
-                    ? 'bg-green-500 text-white'
-                    : 'bg-red-500 text-white'
+                    ? 'bg-green-500 text-gray-800'
+                    : 'bg-red-500 text-gray-800'
                 }`}>
                   {record.attended ? 'Asistió' : 'Faltó'}
                 </span>

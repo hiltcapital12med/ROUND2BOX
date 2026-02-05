@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/services/notificationsService.js
+﻿// UBICACIÓN: /src/services/notificationsService.js
 
 import {
   MOTIVATIONAL_MESSAGES,

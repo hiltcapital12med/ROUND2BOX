@@ -1,0 +1,575 @@
+﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   ROUND2BOX - DESIGN SYSTEM
+   Design System Unificado para toda la aplicaciÃ³n
+   Lead UI/UX Designer approach
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+:root {
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     PALETA DE COLORES - Color System v1
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  
+  /* Primarios */
+  --ds-color-primary: #d8315b; /* Rojo vibrante - AcciÃ³n, Ã©nfasis */
+  --ds-color-primary-dark: #B20409; /* Rojo oscuro - Hover, estados activos */
+  --ds-color-primary-light: #FF4444; /* Rojo claro - Gradientes */
+  
+  /* Neutros */
+  --ds-color-white: #FFFFFF;
+  --ds-color-bg-light: #F9FAFB; /* Fondo ultra-claro */
+  --ds-color-bg-lighter: #F3F4F6; /* Fondo aÃºn mÃ¡s claro */
+  --ds-color-gray-50: #F9FAFB;
+  --ds-color-gray-100: #F3F4F6;
+  --ds-color-gray-200: #E5E7EB;
+  --ds-color-gray-300: #D1D5DB;
+  --ds-color-gray-400: #9CA3AF;
+  --ds-color-gray-500: #6B7280;
+  --ds-color-gray-600: #4B5563;
+  --ds-color-gray-700: #374151;
+  --ds-color-gray-800: #1F2937;
+  --ds-color-gray-900: #111827;
+  
+  /* Oscuros */
+  --ds-color-dark: #1A1A1A;
+  --ds-color-darker: #0F0F0F;
+  
+  /* Acentos Glow - Para efectos visuales */
+  --ds-glow-red: rgba(227, 6, 19, 0.15);
+  --ds-glow-red-strong: rgba(227, 6, 19, 0.25);
+  --ds-glow-red-shadow: rgba(227, 6, 19, 0.3);
+  
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     TIPOGRAFÃA - Typography System
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  
+  --ds-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --ds-font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  --ds-font-size-xs: 0.75rem; /* 12px */
+  --ds-font-size-sm: 0.875rem; /* 14px */
+  --ds-font-size-base: 1rem; /* 16px */
+  --ds-font-size-lg: 1.125rem; /* 18px */
+  --ds-font-size-xl: 1.25rem; /* 20px */
+  --ds-font-size-2xl: 1.5rem; /* 24px */
+  --ds-font-size-3xl: 1.875rem; /* 30px */
+  --ds-font-size-4xl: 2.25rem; /* 36px */
+  --ds-font-size-5xl: 3rem; /* 48px */
+  
+  --ds-font-weight-regular: 400;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-semibold: 600;
+  --ds-font-weight-bold: 700;
+  --ds-font-weight-extrabold: 800;
+  --ds-font-weight-black: 900;
+  
+  --ds-line-height-tight: 1.2;
+  --ds-line-height-normal: 1.5;
+  --ds-line-height-relaxed: 1.75;
+  
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     ESPACIADO - Spacing Scale
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  
+  --ds-spacing-0: 0;
+  --ds-spacing-1: 0.25rem; /* 4px */
+  --ds-spacing-2: 0.5rem; /* 8px */
+  --ds-spacing-3: 0.75rem; /* 12px */
+  --ds-spacing-4: 1rem; /* 16px */
+  --ds-spacing-5: 1.25rem; /* 20px */
+  --ds-spacing-6: 1.5rem; /* 24px */
+  --ds-spacing-7: 1.75rem; /* 28px */
+  --ds-spacing-8: 2rem; /* 32px */
+  --ds-spacing-10: 2.5rem; /* 40px */
+  --ds-spacing-12: 3rem; /* 48px */
+  --ds-spacing-14: 3.5rem; /* 56px */
+  --ds-spacing-16: 4rem; /* 64px */
+  
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     BORDES - Border Radius System
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  
+  --ds-radius-sm: 0.375rem; /* 6px */
+  --ds-radius-md: 0.5rem; /* 8px */
+  --ds-radius-lg: 0.75rem; /* 12px */
+  --ds-radius-xl: 1rem; /* 16px */
+  --ds-radius-2xl: 1.5rem; /* 24px */
+  --ds-radius-3xl: 2rem; /* 32px */
+  --ds-radius-full: 9999px; /* PÃ­ldora */
+  
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     SOMBRAS - Shadow System
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  
+  --ds-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --ds-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --ds-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --ds-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --ds-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --ds-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* Sombras rojas especiales - Para Ã©nfasis */
+  --ds-shadow-red-sm: 0 4px 12px rgba(227, 6, 19, 0.15);
+  --ds-shadow-red-md: 0 8px 24px rgba(227, 6, 19, 0.2);
+  --ds-shadow-red-lg: 0 12px 32px rgba(227, 6, 19, 0.3);
+  --ds-shadow-red-xl: 0 20px 48px rgba(227, 6, 19, 0.4);
+  
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     TRANSICIONES - Transition System
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  
+  --ds-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ds-transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ds-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ds-transition-slower: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     BREAKPOINTS - Responsive Design
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* Usar en media queries: @media (min-width: var(--ds-bp-sm)) */
+  --ds-bp-xs: 0px;
+  --ds-bp-sm: 640px;
+  --ds-bp-md: 768px;
+  --ds-bp-lg: 1024px;
+  --ds-bp-xl: 1280px;
+  --ds-bp-2xl: 1536px;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   BASE STYLES - Global aplicables
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--ds-font-family);
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ds-color-white);
+  color: var(--ds-color-gray-900);
+  font-size: var(--ds-font-size-base);
+  line-height: var(--ds-line-height-normal);
+  margin: 0;
+  padding: 0;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   COMPONENTES DE DISEÃ‘O - Reutilizables
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   BOTONES PRIMARIOS - Red Action Buttons
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+.ds-btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-2);
+  padding: var(--ds-spacing-4) var(--ds-spacing-6);
+  
+  font-family: var(--ds-font-family);
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: var(--ds-line-height-tight);
+  
+  background: linear-gradient(135deg, var(--ds-color-primary) 0%, var(--ds-color-primary-light) 100%);
+  color: var(--ds-color-white);
+  border: none;
+  border-radius: var(--ds-radius-lg);
+  
+  box-shadow: var(--ds-shadow-red-md);
+  cursor: pointer;
+  
+  transition: all var(--ds-transition-base);
+  overflow: hidden;
+  
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ds-btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left var(--ds-transition-slower);
+}
+
+.ds-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ds-shadow-red-lg);
+}
+
+.ds-btn-primary:hover::before {
+  left: 100%;
+}
+
+.ds-btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--ds-shadow-red-md);
+}
+
+.ds-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   TARJETAS DE ACCIÃ“N - Action Cards (SelecciÃ³n de Perfil)
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+.ds-action-card {
+  position: relative;
+  overflow: hidden;
+  
+  background: linear-gradient(135deg, var(--ds-color-primary) 0%, var(--ds-color-primary-dark) 100%);
+  border: none;
+  border-radius: var(--ds-radius-2xl);
+  
+  padding: var(--ds-spacing-7) var(--ds-spacing-8);
+  
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-6);
+  
+  cursor: pointer;
+  transition: all var(--ds-transition-base);
+  box-shadow: var(--ds-shadow-red-lg);
+  
+  font-family: var(--ds-font-family);
+  text-align: left;
+  color: var(--ds-color-white);
+}
+
+/* Barra decorativa lateral */
+.ds-action-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  transition: width var(--ds-transition-base);
+}
+
+/* Efecto shine en hover */
+.ds-action-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left var(--ds-transition-slower);
+}
+
+.ds-action-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--ds-shadow-red-xl);
+}
+
+.ds-action-card:hover::before {
+  width: 6px;
+}
+
+.ds-action-card:hover::after {
+  left: 100%;
+}
+
+.ds-action-card:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+/* Componentes internos de la tarjeta */
+.ds-action-card__icon {
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+  
+  width: 64px;
+  height: 64px;
+  border-radius: var(--ds-radius-full);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  
+  transition: all var(--ds-transition-base);
+}
+
+.ds-action-card:hover .ds-action-card__icon {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.15);
+}
+
+.ds-action-card__icon svg {
+  width: 32px;
+  height: 32px;
+  color: var(--ds-color-white);
+}
+
+.ds-action-card__content {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-1);
+}
+
+.ds-action-card__title {
+  font-size: var(--ds-font-size-xl);
+  font-weight: var(--ds-font-weight-black);
+  line-height: var(--ds-line-height-tight);
+  color: var(--ds-color-white);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.ds-action-card__subtitle {
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-normal);
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.ds-action-card__arrow {
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+  
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  color: rgba(255, 255, 255, 0.6);
+  transition: all var(--ds-transition-base);
+}
+
+.ds-action-card:hover .ds-action-card__arrow {
+  color: var(--ds-color-white);
+  transform: translateX(4px);
+}
+
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   CONTENEDORES Y LAYOUTS
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+.ds-container-primary {
+  background: var(--ds-color-white);
+  border-radius: var(--ds-radius-2xl);
+  padding: var(--ds-spacing-8);
+  box-shadow: var(--ds-shadow-md);
+}
+
+.ds-container-light {
+  background: linear-gradient(135deg, var(--ds-color-bg-light) 0%, var(--ds-color-bg-lighter) 100%);
+}
+
+/* Fondo con glow effect sutil */
+.ds-bg-with-glow {
+  position: relative;
+  background: var(--ds-color-white);
+  overflow: hidden;
+}
+
+.ds-bg-with-glow::before,
+.ds-bg-with-glow::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+}
+
+.ds-bg-with-glow::before {
+  top: -10%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: var(--ds-glow-red);
+}
+
+.ds-bg-with-glow::after {
+  bottom: -10%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: var(--ds-glow-red);
+}
+
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   ANIMACIONES - Micro-interactions
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+@keyframes ds-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ds-fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ds-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ds-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.ds-animate-fade-in-up {
+  animation: ds-fade-in-up 0.6s ease-out forwards;
+}
+
+.ds-animate-fade-in-down {
+  animation: ds-fade-in-down 0.6s ease-out forwards;
+}
+
+.ds-animate-scale-in {
+  animation: ds-scale-in 0.4s ease-out forwards;
+}
+
+.ds-animate-pulse {
+  animation: ds-pulse 2s ease-in-out infinite;
+}
+
+/* Delay staggering para listas */
+.ds-animate-stagger-1 { animation-delay: 0.1s; }
+.ds-animate-stagger-2 { animation-delay: 0.2s; }
+.ds-animate-stagger-3 { animation-delay: 0.3s; }
+
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   UTILIDADES - Utility Classes
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+.ds-text-primary {
+  color: var(--ds-color-primary);
+}
+
+.ds-text-gray-800 {
+  color: var(--ds-color-white);
+}
+
+.ds-text-dark {
+  color: var(--ds-color-gray-900);
+}
+
+.ds-text-muted {
+  color: var(--ds-color-gray-600);
+}
+
+.ds-gap-4 { gap: var(--ds-spacing-4); }
+.ds-gap-6 { gap: var(--ds-spacing-6); }
+.ds-gap-8 { gap: var(--ds-spacing-8); }
+
+.ds-p-6 { padding: var(--ds-spacing-6); }
+.ds-p-8 { padding: var(--ds-spacing-8); }
+.ds-p-12 { padding: var(--ds-spacing-12); }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   RESPONSIVE MOBILE-FIRST
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+@media (max-width: 768px) {
+  .ds-action-card {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--ds-spacing-6) var(--ds-spacing-5);
+    gap: var(--ds-spacing-4);
+  }
+
+  .ds-action-card__content {
+    align-items: center;
+  }
+
+  .ds-action-card__arrow {
+    display: none;
+  }
+
+  .ds-action-card__icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .ds-action-card__icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .ds-action-card__title {
+    font-size: var(--ds-font-size-lg);
+  }
+
+  .ds-btn-primary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .ds-container-primary {
+    padding: var(--ds-spacing-6);
+  }
+
+  .ds-action-card {
+    padding: var(--ds-spacing-5) var(--ds-spacing-4);
+  }
+
+  .ds-action-card__title {
+    font-size: var(--ds-font-size-base);
+  }
+
+  .ds-action-card__subtitle {
+    font-size: var(--ds-font-size-xs);
+  }
+
+  .ds-bg-with-glow::before,
+  .ds-bg-with-glow::after {
+    width: 250px;
+    height: 250px;
+  }
+}

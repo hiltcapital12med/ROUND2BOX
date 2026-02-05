@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/components/features/notifications/NotificationIntegration.jsx
+﻿// UBICACIÓN: /src/components/features/notifications/NotificationIntegration.jsx
 // EJEMPLO: Cómo integrar notificaciones con datos reales de Firebase
 
 import React, { useEffect } from 'react';

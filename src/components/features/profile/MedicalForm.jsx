@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/components/features/profile/MedicalForm.jsx
+﻿// UBICACIÓN: /src/components/features/profile/MedicalForm.jsx
 import React, { useState, useEffect } from 'react';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../../services/firebase';
@@ -59,7 +59,7 @@ export default function MedicalForm() {
     if (bmi < 18.5) return 'text-blue-400'; // Bajo peso
     if (bmi < 24.9) return 'text-green-500'; // Normal
     if (bmi < 29.9) return 'text-yellow-500'; // Sobrepeso
-    return 'text-brand-red'; // Obesidad
+    return 'text-brand-accent'; // Obesidad
   };
 
   const handleSubmit = async (e) => {
@@ -106,24 +106,24 @@ export default function MedicalForm() {
   };
 
   // Clases de estilo reutilizables
-  const inputClass = "w-full bg-brand-charcoal border border-white/10 text-white p-4 rounded-xl focus:outline-none focus:border-brand-gold/50 focus:ring-1 focus:ring-brand-gold/50 transition-all placeholder-gray-600";
-  const labelClass = "block text-brand-gold text-xs font-bold uppercase tracking-widest mb-2 ml-1";
+  const inputClass = "w-full bg-brand-dark border border-white/10 text-gray-800 p-4 rounded-xl focus:outline-none focus:border-brand-secondary/50 focus:ring-1 focus:ring-brand-secondary/50 transition-all placeholder-gray-600";
+  const labelClass = "block text-brand-secondary text-xs font-bold uppercase tracking-widest mb-2 ml-1";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in-up">
       
       {/* HEADER AMIGABLE */}
-      <div className="bg-brand-charcoal border border-white/5 p-4 rounded-xl flex items-start gap-3">
-        <Heartbeat size={32} className="text-brand-red flex-shrink-0" weight="duotone" />
+      <div className="bg-brand-dark border border-white/5 p-4 rounded-xl flex items-start gap-3">
+        <Heartbeat size={32} className="text-brand-accent flex-shrink-0" weight="duotone" />
         <div>
-          <h3 className="text-white font-bold text-sm">Tu Perfil Atlético</h3>
+          <h3 className="text-gray-800 font-bold text-sm">Tu Perfil Atlético</h3>
           <p className="text-gray-400 text-xs">Ayúdanos a calibrar tu entrenamiento.</p>
         </div>
       </div>
 
       {/* VISUALIZADOR DE IMC (Solo aparece si ya hay datos) */}
       {formData.bmi && (
-        <div className="bg-black/40 border border-brand-gold/20 p-4 rounded-xl flex justify-between items-center">
+        <div className="bg-black/40 border border-brand-secondary/20 p-4 rounded-xl flex justify-between items-center">
             <div>
                 <span className="text-gray-400 text-xs uppercase tracking-wider block">Tu IMC Actual</span>
                 <span className={`text-2xl font-black ${getBMIColor(formData.bmi)}`}>
@@ -132,7 +132,7 @@ export default function MedicalForm() {
             </div>
             <div className="text-right">
                 <span className="text-[10px] text-gray-500 block">Calculado automáticamente</span>
-                <span className="text-xs text-brand-gold font-bold">
+                <span className="text-xs text-brand-secondary font-bold">
                     {formData.bmi < 24.9 && formData.bmi > 18.5 ? 'Rango Saludable' : 'Requiere Ajuste'}
                 </span>
             </div>
@@ -175,14 +175,14 @@ export default function MedicalForm() {
             <button 
                 type="button"
                 onClick={() => setFormData({...formData, gender: 'male'})}
-                className={`p-3 rounded-xl border transition-all ${formData.gender === 'male' ? 'bg-brand-gold text-black border-brand-gold font-bold' : 'bg-brand-charcoal text-gray-400 border-white/10'}`}
+                className={`p-3 rounded-xl border transition-all ${formData.gender === 'male' ? 'bg-brand-secondary text-black border-brand-secondary font-bold' : 'bg-brand-dark text-gray-400 border-white/10'}`}
             >
                 Masculino
             </button>
             <button 
                 type="button"
                 onClick={() => setFormData({...formData, gender: 'female'})}
-                className={`p-3 rounded-xl border transition-all ${formData.gender === 'female' ? 'bg-brand-gold text-black border-brand-gold font-bold' : 'bg-brand-charcoal text-gray-400 border-white/10'}`}
+                className={`p-3 rounded-xl border transition-all ${formData.gender === 'female' ? 'bg-brand-secondary text-black border-brand-secondary font-bold' : 'bg-brand-dark text-gray-400 border-white/10'}`}
             >
                 Femenino
             </button>
@@ -192,7 +192,7 @@ export default function MedicalForm() {
       {/* NUEVO CAMPO: ANTECEDENTES (Amigable y Opcional) */}
       <div>
         <label className={labelClass}>
-            <Info size={16} className="inline mr-1 text-brand-gold"/> 
+            <Info size={16} className="inline mr-1 text-brand-secondary"/> 
             Observaciones para el Coach
             <span className="ml-2 text-[10px] text-gray-500 normal-case font-normal">(Opcional)</span>
         </label>
@@ -210,7 +210,7 @@ export default function MedicalForm() {
       <button 
         type="submit" 
         disabled={loading}
-        className="w-full bg-brand-red text-white font-black py-4 rounded-xl shadow-lg shadow-brand-red/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2 group"
+        className="w-full bg-brand-accent text-gray-800 font-black py-4 rounded-xl shadow-lg shadow-brand-accent/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2 group"
       >
         {loading ? (
            <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>

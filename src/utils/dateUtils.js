@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/utils/dateUtils.js
+﻿// UBICACIÓN: /src/utils/dateUtils.js
 // Utilidades para cálculos de fechas y días efectivos de entrenamiento
 
 /**
@@ -167,8 +167,8 @@ export function calculateConsistencyPercentage(attendances, possibleDays) {
  */
 export function getLevelFromConsistency(consistency) {
   const levels = {
-    'ÉLITE': { min: 85, message: '¡Eres una máquina! 🚀', color: 'text-brand-red' },
-    'PRO': { min: 70, message: 'Muy consistente. Sigue así 💪', color: 'text-brand-gold' },
+    'ÉLITE': { min: 85, message: '¡Eres una máquina! 🚀', color: 'text-brand-accent' },
+    'PRO': { min: 70, message: 'Muy consistente. Sigue así 💪', color: 'text-brand-secondary' },
     'CONSISTENTE': { min: 50, message: 'Buen ritmo. Vamos adelante 🔥', color: 'text-green-500' },
     'INICIADO': { min: 25, message: 'Comienza tu viaje 🌟', color: 'text-blue-500' },
     'PRINCIPIANTE': { min: 0, message: 'Cada día es un nuevo comienzo 💚', color: 'text-gray-500' }

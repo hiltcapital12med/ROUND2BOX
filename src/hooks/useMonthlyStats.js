@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/hooks/useMonthlyStats.js
+﻿// UBICACIÓN: /src/hooks/useMonthlyStats.js
 // Hook para obtener estadísticas mensuales del usuario
 
 import { useState, useEffect } from 'react';

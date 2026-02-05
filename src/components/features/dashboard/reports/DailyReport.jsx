@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../../../services/firebase';
 import { format, startOfDay, endOfDay } from 'date-fns';
@@ -84,19 +84,19 @@ export default function DailyReport() {
   return (
     <div className="space-y-4">
       <div className="flex gap-4 items-center">
-        <label className="text-white text-sm">Selecciona fecha:</label>
+        <label className="text-gray-800 text-sm">Selecciona fecha:</label>
         <input
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          className="px-3 py-2 bg-black/40 border border-white/20 rounded-lg text-white"
+          className="px-3 py-2 bg-black/40 border border-white/20 rounded-lg text-gray-800"
         />
       </div>
 
       {loading ? (
-        <div className="text-white/60 text-center py-4">Cargando...</div>
+        <div className="text-gray-800/60 text-center py-4">Cargando...</div>
       ) : dailyData.length === 0 ? (
-        <div className="text-white/60 text-center py-4">No hay reservas para este día</div>
+        <div className="text-gray-800/60 text-center py-4">No hay reservas para este día</div>
       ) : (
         <div className="space-y-3 max-h-[400px] overflow-y-auto">
           {Object.entries(groupedByTime).map(([time, items]) => (
@@ -115,15 +115,15 @@ export default function DailyReport() {
                     }`}
                   >
                     <div>
-                      <p className="text-white font-semibold">{item.userName}</p>
-                      <p className="text-xs text-white/60 mt-1">
+                      <p className="text-gray-800 font-semibold">{item.userName}</p>
+                      <p className="text-xs text-gray-800/60 mt-1">
                         Clase: {item.time}h
                       </p>
                     </div>
                     <span className={`text-xs px-3 py-1 rounded-full font-bold ${
                       item.attended
-                        ? 'bg-green-500 text-white'
-                        : 'bg-orange-500 text-white'
+                        ? 'bg-green-500 text-gray-800'
+                        : 'bg-orange-500 text-gray-800'
                     }`}>
                       {item.attended ? '✓ Asistió' : 'Inscrito'}
                     </span>
@@ -137,10 +137,10 @@ export default function DailyReport() {
 
       {dailyData.length > 0 && (
         <div className="mt-4 p-4 bg-black/40 rounded-lg border border-white/10">
-          <p className="text-white/80 mb-2">
+          <p className="text-gray-800/80 mb-2">
             <span className="font-bold text-brand-neon">{dailyData.length}</span> asistentes inscrit{dailyData.length !== 1 ? 'os' : 'o'}
           </p>
-          <p className="text-white/80">
+          <p className="text-gray-800/80">
             Ocupación de la clase: 
             <span className="font-bold text-brand-neon ml-2">
               {dailyData.length}/4 cupos

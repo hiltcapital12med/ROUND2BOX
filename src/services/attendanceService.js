@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/services/attendanceService.js
+﻿// UBICACIÓN: /src/services/attendanceService.js
 // Servicio para gestionar la asistencia semanal del usuario
 
 import { db } from './firebase';

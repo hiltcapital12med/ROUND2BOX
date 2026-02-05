@@ -1,4 +1,4 @@
-// UBICACIÓN: /src/components/features/dashboard/AthleteHomeDashboard.jsx
+﻿// UBICACIÓN: /src/components/features/dashboard/AthleteHomeDashboard.jsx
 // Dashboard de inicio para atletas con datos dinámicos desde Firebase
 
 import React from 'react';
@@ -26,11 +26,11 @@ export default function AthleteHomeDashboard() {
     <div className="flex flex-col h-full">
       {/* 1. ENCABEZADO PERSONALIZADO */}
       <div className="mb-8 animate-fade-in-down">
-        <h1 className="text-3xl font-black text-white leading-none relative z-10">
-          Hola, <span className="text-brand-red">{user.displayName?.split(' ')[0]}</span>
+        <h1 className="text-3xl font-black text-gray-800 leading-none relative z-10">
+          Hola, <span className="text-brand-accent">{user.displayName?.split(' ')[0]}</span>
         </h1>
-        <p className="text-white/70 text-sm font-medium mt-2 flex items-center gap-2">
-          <span className="inline-block w-2 h-2 bg-brand-red rounded-full animate-pulse"></span>
+        <p className="text-gray-800/70 text-sm font-medium mt-2 flex items-center gap-2">
+          <span className="inline-block w-2 h-2 bg-brand-accent rounded-full animate-pulse"></span>
           Racha de 3 días activa. No pares.
         </p>
       </div>
@@ -38,8 +38,8 @@ export default function AthleteHomeDashboard() {
       {/* 2. EL NÚCLEO DEL ATLETA (Visualización Central) */}
       <div className="flex-grow flex flex-col items-center justify-center mb-8 relative animate-fade-in">
         {/* Círculos de fondo decorativos (Dinamismo) */}
-        <div className="absolute w-64 h-64 bg-brand-red/10 rounded-full blur-3xl -z-10"></div>
-        <div className="absolute w-48 h-48 bg-brand-gold/5 rounded-full blur-2xl -z-10"></div>
+        <div className="absolute w-64 h-64 bg-brand-accent/10 rounded-full blur-3xl -z-10"></div>
+        <div className="absolute w-48 h-48 bg-brand-secondary/5 rounded-full blur-2xl -z-10"></div>
 
         {/* COMPONENTE DE RUEDA DINÁMICA */}
         <ProgressRing />
@@ -48,22 +48,22 @@ export default function AthleteHomeDashboard() {
       {/* 3. PRÓXIMA ACCIÓN IMPACTANTE */}
       <div className="mb-8 animate-fade-in-up">
         {classLoading ? (
-          <div className="text-white/60 text-center py-8">Cargando información...</div>
+          <div className="text-gray-800/60 text-center py-8">Cargando información...</div>
         ) : nextClass ? (
           <>
             <AttendanceConfirmation userId={user.uid} nextClass={nextClass} />
-            <div className="group relative bg-gradient-to-br from-brand-charcoal to-brand-dark border border-brand-gold/30 rounded-2xl p-6 overflow-hidden transition-all hover:border-brand-red/50">
+            <div className="group relative bg-gradient-to-br from-brand-dark to-brand-dark border border-brand-secondary/30 rounded-2xl p-6 overflow-hidden transition-all hover:border-brand-accent/50">
               {/* Efecto de brillo al pasar el mouse */}
-              <div className="absolute inset-0 bg-gradient-to-r from-brand-red/0 via-brand-red/10 to-brand-red/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-brand-accent/0 via-brand-accent/10 to-brand-accent/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
 
               <div className="relative z-10">
                 <div className="flex items-baseline gap-2 mb-3">
-                  <span className="inline-block bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">HOY</span>
-                  <span className="text-3xl font-black text-brand-gold">{nextClass.time}h</span>
+                  <span className="inline-block bg-brand-accent text-gray-800 text-[10px] font-bold px-2 py-0.5 rounded uppercase">HOY</span>
+                  <span className="text-3xl font-black text-brand-secondary">{nextClass.time}h</span>
                 </div>
                 <div>
-                  <p className="text-white/60 text-sm mb-2">Entrenador</p>
-                  <p className="text-2xl font-bold text-white">
+                  <p className="text-gray-800/60 text-sm mb-2">Entrenador</p>
+                  <p className="text-2xl font-bold text-gray-800">
                     {trainer?.name || 'Por asignar'}
                   </p>
                 </div>
@@ -87,13 +87,13 @@ export default function AthleteHomeDashboard() {
               monthlyLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'
             }`}
           ></div>
-          <CalendarCheck size={24} className="text-brand-gold mx-auto mb-2" weight="duotone" />
+          <CalendarCheck size={24} className="text-brand-secondary mx-auto mb-2" weight="duotone" />
           {monthlyLoading ? (
-            <span className="block text-2xl font-bold text-white/60">--</span>
+            <span className="block text-2xl font-bold text-gray-800/60">--</span>
           ) : (
-            <span className="block text-2xl font-bold text-white">{monthlyAttendances}</span>
+            <span className="block text-2xl font-bold text-gray-800">{monthlyAttendances}</span>
           )}
-          <span className="text-xs text-white/60">Asistencias Mes</span>
+          <span className="text-xs text-gray-800/60">Asistencias Mes</span>
         </div>
 
         {/* Métrica 2 - Objetivo Semanal (%) */}
@@ -104,13 +104,13 @@ export default function AthleteHomeDashboard() {
               weeklyLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'
             }`}
           ></div>
-          <Target size={24} className="text-brand-red mx-auto mb-2" weight="duotone" />
+          <Target size={24} className="text-brand-accent mx-auto mb-2" weight="duotone" />
           {weeklyLoading ? (
-            <span className="block text-2xl font-bold text-white/60">--</span>
+            <span className="block text-2xl font-bold text-gray-800/60">--</span>
           ) : (
-            <span className="block text-2xl font-bold text-white">{weeklyConsistency}%</span>
+            <span className="block text-2xl font-bold text-gray-800">{weeklyConsistency}%</span>
           )}
-          <span className="text-xs text-white/60">Obj. Semanal</span>
+          <span className="text-xs text-gray-800/60">Obj. Semanal</span>
         </div>
 
         {/* Métrica 3 - Peso Actual (Dinámico desde Firebase) */}
@@ -122,22 +122,22 @@ export default function AthleteHomeDashboard() {
             }`}
           ></div>
           
-          <User size={24} className="text-brand-gold mx-auto mb-2" weight="duotone" />
+          <User size={24} className="text-brand-secondary mx-auto mb-2" weight="duotone" />
           
           {weighLoading ? (
-            <span className="block text-xl font-bold text-white/60">--</span>
+            <span className="block text-xl font-bold text-gray-800/60">--</span>
           ) : weight ? (
-            <span className="block text-xl font-bold text-white">
+            <span className="block text-xl font-bold text-gray-800">
               {weight} <span className="text-sm font-normal">kg</span>
             </span>
           ) : (
-            <span className="block text-sm font-bold text-white/60">Sin datos</span>
+            <span className="block text-sm font-bold text-gray-800/60">Sin datos</span>
           )}
           
-          <span className="text-xs text-white/60">Peso Actual</span>
+          <span className="text-xs text-gray-800/60">Peso Actual</span>
           
           {bmi && weight && (
-            <span className="block text-xs text-white/40 mt-1">IMC: {bmi}</span>
+            <span className="block text-xs text-gray-800/40 mt-1">IMC: {bmi}</span>
           )}
         </div>
       </div>
