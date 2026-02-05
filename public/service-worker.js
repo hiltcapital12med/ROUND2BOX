@@ -56,7 +56,7 @@ self.addEventListener('fetch', (evt) => {
     return;
   }
 
-  // Ignorar peticiones de desarrollo/Vite
+  // Ignorar peticiones de desarrollo/Vite - PASAR DIRECTAMENTE SIN INTERCEPTAR
   const url = new URL(evt.request.url);
   if (
     url.pathname.includes('/@vite/') ||
@@ -65,7 +65,8 @@ self.addEventListener('fetch', (evt) => {
     url.pathname.startsWith('/src/') ||
     url.pathname.includes('.hot-update')
   ) {
-    // Dejar que estas peticiones vayan directamente a la red sin cachear
+    // NO HACER NADA - dejar que el navegador maneje estos por su cuenta
+    // No llamar evt.respondWith() permite que siga el flujo normal
     return;
   }
 
@@ -93,38 +94,34 @@ self.addEventListener('fetch', (evt) => {
     return;
   }
 
-  // ESTRATEGIA B: Archivos Estáticos (UI) -> Cache First, then Network
+  // ESTRATEGIA B: Archivos Estáticos (UI) -> Cache First, then Network (SIN TIMEOUT)
   evt.respondWith(
     caches.match(evt.request).then((cacheRes) => {
-      // Si está en cache, devolverlo
+      // Si está en cache, devolverlo inmediatamente
       if (cacheRes) {
         return cacheRes;
       }
       
-      // Si no está en cache, intentar fetch con timeout
-      return Promise.race([
-        fetch(evt.request).then((response) => {
-          // Si es exitoso, guardarlo en cache para futuras peticiones
-          if (response.status === 200) {
-            const responseClone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(evt.request.url, responseClone);
-            });
-          }
-          return response;
-        }),
-        new Promise((resolve) =>
-          setTimeout(() => resolve(null), 5000) // 5 segundos timeout
-        )
-      ]).then((response) => {
-        if (!response) {
-          return new Response('Offline', { status: 503 });
+      // Si no está en cache, intentar fetch
+      return fetch(evt.request).then((response) => {
+        // Si es exitoso, guardarlo en cache para futuras peticiones
+        if (response && response.status === 200) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(evt.request.url, responseClone);
+          });
         }
         return response;
       }).catch((err) => {
         console.warn('[ServiceWorker] Fetch failed:', evt.request.url, err);
-        // Devolver respuesta vacía en lugar de fallar
-        return new Response('Offline', { status: 503 });
+        // Intentar obtener del cache como fallback
+        return caches.match(evt.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          // Si no hay nada en cache, devolver un error 503
+          return new Response('Offline - No cached resource', { status: 503 });
+        });
       });
     })
   );
