@@ -9,27 +9,23 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>,
 )
 
-// LIMPIAR TODOS LOS SERVICE WORKERS EN DESARROLLO
-// Esto se ejecuta SIEMPRE, incluso en producción, para limpiar versiones viejas
+// UNREGISTER SERVICE WORKERS EN DESARROLLO
+// Ejecutar esta limpieza SIEMPRE al cargar la app
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
-    console.log(`[App] Found ${registrations.length} service workers`);
-    
     registrations.forEach((registration) => {
-      console.log('[App] Unregistering SW:', registration.scope);
       registration.unregister();
+      console.log('[App] SW unregistered');
     });
   });
 
-  // Limpiar TODOS los caches
+  // Limpiar caches
   if ('caches' in window) {
-    caches.keys().then((cacheNames) => {
-      console.log(`[App] Found ${cacheNames.length} caches to clear`);
-      cacheNames.forEach((cacheName) => {
-        caches.delete(cacheName).then(() => {
-          console.log('[App] Deleted cache:', cacheName);
-        });
-      });
+    caches.keys().then((names) => {
+      names.forEach((name) => caches.delete(name));
     });
   }
 }
+
+// NOTA: Service Worker será registrado SOLO en producción 
+// mediante un build script o configuración de deploy

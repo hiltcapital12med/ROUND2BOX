@@ -51,77 +51,73 @@ self.addEventListener('activate', (evt) => {
 // 3. INTERCEPCIÓN DE PETICIONES (FETCH)
 self.addEventListener('fetch', (evt) => {
   
-  // Ignorar requests que no sean GET
+  // REGLA DE ORO: Solo responder a peticiones que REALMENTE podemos cachear
+  // Para CUALQUIER otra cosa, no llamar evt.respondWith() - dejar que el navegador lo haga
+  
+  // Solo GET requests
   if (evt.request.method !== 'GET') {
     return;
   }
 
-  // Ignorar peticiones de desarrollo/Vite - PASAR DIRECTAMENTE SIN INTERCEPTAR
   const url = new URL(evt.request.url);
+  const pathname = url.pathname;
+
+  // NUNCA cachear archivos de desarrollo - simplemente no interceptar
   if (
-    url.pathname.includes('/@vite/') ||
-    url.pathname.includes('/@react-refresh') ||
-    url.pathname.includes('/node_modules/') ||
-    url.pathname.startsWith('/src/') ||
-    url.pathname.includes('.hot-update')
+    pathname.includes('/@vite') ||
+    pathname.includes('/@react-refresh') ||
+    pathname.includes('/node_modules/') ||
+    pathname.includes('/src/') ||
+    pathname.includes('.hot-update') ||
+    pathname.includes('vite.svg') ||
+    pathname === '/'
   ) {
-    // NO HACER NADA - dejar que el navegador maneje estos por su cuenta
-    // No llamar evt.respondWith() permite que siga el flujo normal
+    // NO HACER NADA - no llamar evt.respondWith()
+    // El navegador manejará la petición normalmente
     return;
   }
 
-  // ESTRATEGIA A: Datos de API (Agenda, Perfil) -> Network First, then Cache
-  if (evt.request.url.includes('/api/')) {
+  // SOLO cachear ciertos tipos de archivos estáticos
+  const cacheableExtensions = ['.js', '.css', '.png', '.jpg', '.svg', '.woff', '.woff2'];
+  const isCacheable = cacheableExtensions.some((ext) => pathname.endsWith(ext));
+
+  if (!isCacheable && !pathname.includes('/api/')) {
+    // Si no es una extensión conocida ni es API, no cachear
+    return;
+  }
+
+  // ESTRATEGIA A: API -> Network First
+  if (pathname.includes('/api/')) {
     evt.respondWith(
-      caches.open(DATA_CACHE_NAME).then((cache) => {
-        return fetch(evt.request)
-          .then((response) => {
-            // Si la red responde bien, guardamos una copia en cache
-            if (response.status === 200) {
+      fetch(evt.request)
+        .then((response) => {
+          if (response.status === 200) {
+            caches.open(DATA_CACHE_NAME).then((cache) => {
               cache.put(evt.request.url, response.clone());
-            }
-            return response;
-          })
-          .catch((err) => {
-            console.warn('[ServiceWorker] API fetch failed, trying cache:', err);
-            // Si falla la red, devolvemos lo que haya en cache
-            return cache.match(evt.request.url).then((cachedResponse) => {
-              return cachedResponse || new Response('Offline - No cached data', { status: 503 });
             });
-          });
-      })
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match(evt.request);
+        })
     );
     return;
   }
 
-  // ESTRATEGIA B: Archivos Estáticos (UI) -> Cache First, then Network (SIN TIMEOUT)
+  // ESTRATEGIA B: Archivos estáticos -> Cache First
   evt.respondWith(
-    caches.match(evt.request).then((cacheRes) => {
-      // Si está en cache, devolverlo inmediatamente
-      if (cacheRes) {
-        return cacheRes;
+    caches.match(evt.request).then((cached) => {
+      if (cached) {
+        return cached;
       }
-      
-      // Si no está en cache, intentar fetch
       return fetch(evt.request).then((response) => {
-        // Si es exitoso, guardarlo en cache para futuras peticiones
         if (response && response.status === 200) {
-          const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(evt.request.url, responseClone);
+            cache.put(evt.request.url, response.clone());
           });
         }
         return response;
-      }).catch((err) => {
-        console.warn('[ServiceWorker] Fetch failed:', evt.request.url, err);
-        // Intentar obtener del cache como fallback
-        return caches.match(evt.request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          // Si no hay nada en cache, devolver un error 503
-          return new Response('Offline - No cached resource', { status: 503 });
-        });
       });
     })
   );
