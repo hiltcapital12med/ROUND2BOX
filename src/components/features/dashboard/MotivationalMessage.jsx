@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Fist } from '@phosphor-icons/react';
+import { Barbell } from '@phosphor-icons/react';
 
 const MOTIVATIONAL_MESSAGES = [
   {
@@ -67,10 +67,10 @@ export default function MotivationalMessage() {
 
   return (
     <div className="flex-shrink-0 flex flex-col items-center">
-      {/* Icono - Guante de Boxeo */}
+      {/* Icono - Barbell de Boxeo */}
       <div className="mb-4">
         <div className="bg-brand-accent/20 border border-brand-accent/40 rounded-full p-3 flex items-center justify-center">
-          <Fist size={32} className="text-brand-accent animate-pulse" weight="fill" />
+          <Barbell size={32} className="text-brand-accent animate-pulse" weight="fill" />
         </div>
       </div>
 

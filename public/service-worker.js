@@ -112,9 +112,11 @@ self.addEventListener('fetch', (evt) => {
         return cached;
       }
       return fetch(evt.request).then((response) => {
+        // Si response es válido y es 200, clonar INMEDIATAMENTE
         if (response && response.status === 200) {
+          const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(evt.request.url, response.clone());
+            cache.put(evt.request.url, responseToCache);
           });
         }
         return response;
