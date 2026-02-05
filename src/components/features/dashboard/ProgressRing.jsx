@@ -142,20 +142,6 @@ export default function ProgressRing() {
   const circumference = 2 * Math.PI * 40; // 251.33
   const strokeDashoffset = circumference * (1 - weeklyData.consistency / 100);
 
-  // Determinar color basado en nivel
-  const getColorClass = () => {
-    switch (weeklyData.level) {
-      case 'ÉLITE':
-        return 'text-brand-secondary';
-      case 'PRO':
-        return 'text-brand-accent';
-      case 'CONSISTENTE':
-        return 'text-orange-400';
-      default:
-        return 'text-gray-800';
-    }
-  };
-
   if (loading) {
     return (
       <div className="relative w-56 h-56 flex items-center justify-center">
@@ -169,22 +155,23 @@ export default function ProgressRing() {
   return (
     <div className="w-full flex flex-col items-center gap-8">
       {/* TARJETA CONTENEDORA */}
-      <div className="w-full bg-white rounded-3xl border border-gray-200 p-8 shadow-sm">
+      <div className="w-full bg-white rounded-3xl border border-gray-200 p-12 shadow-sm">
         
         {/* ENCABEZADO */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-8">
           <span className="inline-block text-brand-secondary text-xs font-bold uppercase tracking-widest px-3 py-1 bg-brand-secondary/10 rounded-full mb-2">
             Esta Semana
           </span>
           <h3 className="text-gray-800 text-lg font-bold">Tu Progreso</h3>
         </div>
 
-        {/* CONTENEDOR DEL ANILLO CON FLEX LAYOUT */}
-        <div className="flex items-center justify-center gap-8">
+        {/* CONTENEDOR CENTRAL - CÍRCULO DE PROGRESO */}
+        <div className="flex flex-col items-center gap-6">
           
-          {/* SVG del Anillo de Progreso */}
-          <div className="flex-shrink-0">
-            <svg className="w-48 h-48 rotate-[-90deg]" viewBox="0 0 100 100">
+          {/* SVG del Anillo de Progreso - CENTRADO */}
+          <div className="relative w-64 h-64 flex items-center justify-center">
+            {/* SVG del anillo */}
+            <svg className="w-full h-full rotate-[-90deg] absolute" viewBox="0 0 100 100">
               {/* Círculo base (gris claro) */}
               <circle
                 cx="50"
@@ -222,59 +209,25 @@ export default function ProgressRing() {
                 </linearGradient>
               </defs>
             </svg>
-          </div>
 
-          {/* CONTENIDO INFORMATIVO */}
-          <div className="flex-1 space-y-4">
-            
-            {/* Nivel y Porcentaje */}
-            <div>
-              <span className={`block text-4xl font-black mb-2 ${getColorClass()}`}>
-                {weeklyData.level}
-              </span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-gray-800">
-                  {weeklyData.consistency}%
-                </span>
-                <span className="text-sm text-gray-600">
-                  de asistencia
-                </span>
+            {/* CONTENIDO DENTRO DEL CÍRCULO */}
+            <div className="absolute text-center z-10">
+              <div className="text-5xl font-black text-gray-800 leading-none mb-2">
+                {weeklyData.consistency}%
+              </div>
+              <div className="text-sm text-gray-600 font-medium">
+                de asistencia
               </div>
             </div>
-
-            {/* Detalle de clases */}
-            <div className="bg-brand-accent/5 border border-brand-accent/20 rounded-xl p-3">
-              <span className="text-xs text-gray-600 uppercase tracking-wide font-semibold block mb-1">
-                Asistencias
-              </span>
-              <span className="text-2xl font-bold text-gray-800">
-                {weeklyData.attendances}
-                <span className="text-sm font-normal text-gray-500 ml-1">
-                  / {weeklyData.possibleClasses} clases
-                </span>
-              </span>
-            </div>
-
-            {/* Racha - Si existe */}
-            {weeklyData.streak > 0 && (
-              <div className="bg-brand-secondary/10 border border-brand-secondary/40 rounded-xl p-3">
-                <span className="text-xs text-brand-secondary uppercase tracking-wide font-semibold block mb-1">
-                  Racha Actual
-                </span>
-                <span className="text-2xl font-bold text-brand-secondary">
-                  🔥 {weeklyData.streak} días
-                </span>
-              </div>
-            )}
-
-            {/* Mensaje Motivador */}
-            <div className="pt-2 border-t border-gray-200">
-              <span className="text-sm text-gray-700 font-medium italic">
-                "{weeklyData.message}"
-              </span>
-            </div>
-
           </div>
+
+          {/* MENSAJE MOTIVADOR DEBAJO */}
+          <div className="text-center pt-2">
+            <span className="text-sm text-gray-700 font-medium italic">
+              "{weeklyData.message}"
+            </span>
+          </div>
+
         </div>
       </div>
     </div>
