@@ -56,6 +56,19 @@ self.addEventListener('fetch', (evt) => {
     return;
   }
 
+  // Ignorar peticiones de desarrollo/Vite
+  const url = new URL(evt.request.url);
+  if (
+    url.pathname.includes('/@vite/') ||
+    url.pathname.includes('/@react-refresh') ||
+    url.pathname.includes('/node_modules/') ||
+    url.pathname.startsWith('/src/') ||
+    url.pathname.includes('.hot-update')
+  ) {
+    // Dejar que estas peticiones vayan directamente a la red sin cachear
+    return;
+  }
+
   // ESTRATEGIA A: Datos de API (Agenda, Perfil) -> Network First, then Cache
   if (evt.request.url.includes('/api/')) {
     evt.respondWith(
@@ -103,7 +116,12 @@ self.addEventListener('fetch', (evt) => {
         new Promise((resolve) =>
           setTimeout(() => resolve(null), 5000) // 5 segundos timeout
         )
-      ]).catch((err) => {
+      ]).then((response) => {
+        if (!response) {
+          return new Response('Offline', { status: 503 });
+        }
+        return response;
+      }).catch((err) => {
         console.warn('[ServiceWorker] Fetch failed:', evt.request.url, err);
         // Devolver respuesta vacía en lugar de fallar
         return new Response('Offline', { status: 503 });

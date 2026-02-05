@@ -9,25 +9,31 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>,
 )
 
-// Registrar Service Worker de forma segura
-if ('serviceWorker' in navigator) {
+// Registrar Service Worker SOLO en producción, no en desarrollo
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.getRegistrations().then((registrations) => {
-      // Desregistrar todos los SWs anteriores para limpiar cache
-      registrations.forEach((registration) => {
-        registration.unregister().then(() => {
-          console.log('[App] Unregistered old service worker');
-          // Limpiar todos los caches
-          if ('caches' in window) {
-            caches.keys().then((cacheNames) => {
-              cacheNames.forEach((cacheName) => {
-                caches.delete(cacheName).then(() => {
-                  console.log('[App] Cleared cache:', cacheName);
-                });
+    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+      console.log('[App] Service Worker registered:', registration);
+    }).catch((error) => {
+      console.warn('[App] Service Worker registration failed:', error);
+    });
+  });
+} else if (!import.meta.env.PROD && 'serviceWorker' in navigator) {
+  // En desarrollo, desregistrar cualquier SW anterior
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => {
+      registration.unregister().then(() => {
+        console.log('[App] Unregistered service worker (dev mode)');
+        // Limpiar todos los caches
+        if ('caches' in window) {
+          caches.keys().then((cacheNames) => {
+            cacheNames.forEach((cacheName) => {
+              caches.delete(cacheName).then(() => {
+                console.log('[App] Cleared cache:', cacheName);
               });
             });
-          }
-        });
+          });
+        }
       });
     });
   });
