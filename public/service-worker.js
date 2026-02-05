@@ -16,7 +16,18 @@ self.addEventListener('install', (evt) => {
   evt.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[ServiceWorker] Pre-caching offline page');
-      return cache.addAll(STATIC_ASSETS);
+      // Solo cachear archivos que existen realmente
+      return Promise.allSettled(
+        STATIC_ASSETS.map((url) =>
+          fetch(url).then((response) => {
+            if (response.status === 200) {
+              return cache.put(url, response);
+            }
+          }).catch((err) => {
+            console.warn(`[ServiceWorker] Could not cache ${url}:`, err);
+          })
+        )
+      );
     })
   );
   self.skipWaiting();
@@ -40,6 +51,11 @@ self.addEventListener('activate', (evt) => {
 // 3. INTERCEPCIÓN DE PETICIONES (FETCH)
 self.addEventListener('fetch', (evt) => {
   
+  // Ignorar requests que no sean GET
+  if (evt.request.method !== 'GET') {
+    return;
+  }
+
   // ESTRATEGIA A: Datos de API (Agenda, Perfil) -> Network First, then Cache
   if (evt.request.url.includes('/api/')) {
     evt.respondWith(
@@ -52,9 +68,12 @@ self.addEventListener('fetch', (evt) => {
             }
             return response;
           })
-          .catch(() => {
+          .catch((err) => {
+            console.warn('[ServiceWorker] API fetch failed, trying cache:', err);
             // Si falla la red, devolvemos lo que haya en cache
-            return cache.match(evt.request.url);
+            return cache.match(evt.request.url).then((cachedResponse) => {
+              return cachedResponse || new Response('Offline - No cached data', { status: 503 });
+            });
           });
       })
     );
@@ -64,7 +83,31 @@ self.addEventListener('fetch', (evt) => {
   // ESTRATEGIA B: Archivos Estáticos (UI) -> Cache First, then Network
   evt.respondWith(
     caches.match(evt.request).then((cacheRes) => {
-      return cacheRes || fetch(evt.request);
+      // Si está en cache, devolverlo
+      if (cacheRes) {
+        return cacheRes;
+      }
+      
+      // Si no está en cache, intentar fetch con timeout
+      return Promise.race([
+        fetch(evt.request).then((response) => {
+          // Si es exitoso, guardarlo en cache para futuras peticiones
+          if (response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(evt.request.url, responseClone);
+            });
+          }
+          return response;
+        }),
+        new Promise((resolve) =>
+          setTimeout(() => resolve(null), 5000) // 5 segundos timeout
+        )
+      ]).catch((err) => {
+        console.warn('[ServiceWorker] Fetch failed:', evt.request.url, err);
+        // Devolver respuesta vacía en lugar de fallar
+        return new Response('Offline', { status: 503 });
+      });
     })
   );
 });
